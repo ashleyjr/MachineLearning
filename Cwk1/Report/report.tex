@@ -7,14 +7,15 @@
 \hypersetup{colorlinks=false}   % Set to false for black/white printing
 \input{Definitions}            % Include your abbreviations
 
+\usepackage[nodayofweek]{datetime}
 \usepackage{listings}
 \usepackage{color}
 
 %% ----------------------------------------------------------------
 \begin{document}
 \frontmatter
-\title      {COMP6036 Advanced Machine Learning\\[1cm]
-            A Density-Based Algorithm for Discovering Clusters in Large Spatial Databases with Noise (DBSCAN)}
+\title      {COMP6036: Advanced Machine Learning\\[1cm]
+            An investigation into DBSCAN}
       
 \addresses  {\deptname\\\univname}
 \authors                 {\href{mailto:ajr2g10@ecs.soton.ac.uk}{Ashley J. Robinson}\\\href{mailto:ajr2g10@ecs.soton.ac.uk}{ajr2g10@ecs.soton.ac.uk}}
@@ -35,9 +36,22 @@ Your abstract goes here
 
 
 \section{Introduction}
+
+DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is a clustering algorithm with three objectives~\citep{Ester96adensity-based}.
+
+\begin{itemize}
+   \item Minimise the required domain knowledge needed to set input parameters. 
+   \item Have the capability to discover clusters of arbitrary shapes.
+   \item Good performance on large spatial databases.
+\end{itemize}
+
+
 \section{Algorithm Motivation}
 \section{Technical Explanation}
 \section{Conclusion and Further Work}
+
+\bibliographystyle{ecs}
+\bibliography{references}
 
 
 
