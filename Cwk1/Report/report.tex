@@ -35,14 +35,16 @@ Your abstract goes here
 \mainmatter
 
 
-\section{Introduction}
+\section{Motivation for Algorithm}
 
-DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is an application of machine learning introduced by~\cite{Ester96adensity-based}.
+DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is an application of machine learning introduced by~\cite{ester96dbscan}.
+Intended to address Spatial Database Systems (SDBS) which can be produced from natural geometric and geographical datasets or applications such a layout for integrated circuit design~\citep{guting94sdbs}.
 It has three main objectives.
 To minimise the required domain knowledge needed to set input parameters, have the capability to discover clusters of arbitrary shapes and to perform well on large spatial databases.
 
-\section{Algorithm Motivation}
-
+At the time of creation the algorithms was compared to a recent development called CALARANS~\citep{ng94clarans} which is an extension of CLARA (Clustering LARge Applications)~\citep{kaufman90clara}.
+Both algorithms are intended for use on large databases but CLARANS uses random noise to improve performance.
+Apart from traditional clustering algorithms, such a K-means, DBSCAN was a breakthrough in terms of a density approach to datasets.
 
 \section{Technical Explanation}
 
