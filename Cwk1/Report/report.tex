@@ -11,6 +11,10 @@
 \usepackage{listings}
 \usepackage{color}
 
+\usepackage{graphicx}
+
+
+
 %% ----------------------------------------------------------------
 \begin{document}
 \frontmatter
@@ -47,6 +51,28 @@ Both algorithms are intended for use on large databases but CLARANS uses random 
 Apart from traditional clustering algorithms, such a K-means, DBSCAN was a breakthrough in terms of a density approach to datasets.
 
 \section{Technical Explanation}
+
+
+The graphs in Figure~\ref{fig:compare} are different clustering algorithms applied to a shape dataset taken from~\cite{gionis05cluster}. 
+Algorithms were taken from a machine learning toolbox for Python~\citep{scikit13ml}. 
+\begin{figure}[ht]
+   \centering
+   \subfigure[K-Means]{
+      \includegraphics[height = 5cm,width = 5cm]{kmeans.pdf}
+      \label{fig:kmeans}
+   }
+   \subfigure[WARD]{
+      \includegraphics[height = 5cm, width = 5cm]{ward.pdf}
+      \label{fig:ward}
+   }
+   \subfigure[DBSCAN]{
+      \includegraphics[height = 5cm,width = 5cm]{dbscan.pdf}
+      \label{fig:dbscan}
+   }
+   \caption{A comparison against DBSCAN}
+   \label{fig:compare}
+\end{figure}
+
 
 
 \section{Conclusion and Further Work}
