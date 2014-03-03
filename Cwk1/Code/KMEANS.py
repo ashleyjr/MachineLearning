@@ -47,7 +47,7 @@ for k, col in zip(unique_labels, colors):
     for index in class_members:
         x = X[index]
         pl.plot(x[0], x[1], 'o', markerfacecolor=col,
-                markeredgecolor='k')
+                markeredgecolor='k',markersize=10)
 pl.grid()
 pl.show()
 raw_input("Press Enter to continue...")

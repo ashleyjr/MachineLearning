@@ -55,7 +55,7 @@ for k, col in zip(unique_labels, colors):
         else:
             markersize = 6
         pl.plot(x[0], x[1], 'o', markerfacecolor=col,
-                markeredgecolor='k')
+                markeredgecolor='k', markersize=10)
 #pl.title('DBSCAN - %d Clusters' % n_clusters_)
 pl.grid()
 pl.show()

@@ -52,6 +52,9 @@ Apart from traditional clustering algorithms, such a K-means, DBSCAN was a break
 
 \section{Technical Explanation}
 
+DBSCAN uses cluster density to classify data.
+It tries to find connectivity between data poiunts within a reasonable distance.
+This distance is passed to algorithm as an input parameter and can be tuned to give
 
 The graphs in Figure~\ref{fig:compare} are different clustering algorithms applied to a shape dataset taken from~\cite{gionis05cluster}. 
 Algorithms were taken from a machine learning toolbox for Python~\citep{scikit13ml}. 
@@ -72,6 +75,18 @@ Algorithms were taken from a machine learning toolbox for Python~\citep{scikit13
    \caption{A comparison against DBSCAN}
    \label{fig:compare}
 \end{figure}
+
+The algorithm exhibits variation in perforamce as per the standard bias-variance dilemma.
+Figure~\ref{fig:error} shows how the error varies for DBSCAN when applied to data used in Figure~\ref{fig:compare}.
+The EPS paramter sets the distance which the algorithm allow itself to jump and consider itself in the same cluster.
+
+\begin{figure}[ht]
+   \centering
+    \includegraphics[height = 5cm,width = 8cm]{error.pdf}
+   \caption{Generalisation error with varying input parameter}
+   \label{fig:error}
+\end{figure}
+
 
 
 
