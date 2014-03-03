@@ -18,7 +18,7 @@
 %% ----------------------------------------------------------------
 \begin{document}
 \frontmatter
-\title      {COMP6036: Advanced Machine Learning\\[1cm]
+\title      {COMP6036: Advanced Machine Learning\\
             An investigation into DBSCAN}
       
 \addresses  {\deptname\\\univname}
@@ -33,7 +33,9 @@
 
 
 \begin{abstract}
-Your abstract goes here
+DBSCAN is used for clustering sparse spatial databases using data point density.
+The algorithm performs well at this but has some shortcomings when applied to specific tasks.
+Scalability is ones of its major advanatges.
 \end{abstract}
 
 \mainmatter
@@ -52,12 +54,33 @@ Apart from traditional clustering algorithms, such a K-means, DBSCAN was a break
 
 \section{Technical Explanation}
 
-DBSCAN uses cluster density to classify data.
-It tries to find connectivity between data poiunts within a reasonable distance.
-This distance is passed to algorithm as an input parameter and can be tuned to give
+DBSCAN uses the notion of cluster density to classify data.
+It is intuitive to build a community of data points by attempting to draw a path of connectivity.
+This leads to the first input parameter to the algorithm, $\epsilon$, a distance threshold for which DBSCAN is permitted to move yet remain in the same cluster.
+Equation~\eqref{eqn:dist}, adapted from~\cite{ester96dbscan}, is the basic function used for thresholding; euclidean distance is used in this case but the measure of distance can be replaced with a Manhattan norm to scale down computational overheads~\citep{krause86taxicab}.
+
+\newpage
+\begin{equation}
+	N(\textbf{p},\textbf{q},\epsilon) = \left\{
+		\begin{array}{l}
+    		1,\: ||\textbf{p} - \textbf{q}|| \leq \epsilon\\
+    		0,\: ||\textbf{p} - \textbf{q}|| > \epsilon
+  		\end{array} \right.
+	\:\:where\:\: \textbf{q},\textbf{p} \in \textbf{D}
+	\label{eqn:dist}
+\end{equation}
+
+This works fine until
+\section{Performance}
 
 The graphs in Figure~\ref{fig:compare} are different clustering algorithms applied to a shape dataset taken from~\cite{gionis05cluster}. 
-Algorithms were taken from a machine learning toolbox for Python~\citep{scikit13ml}. 
+Algorithms were taken from a machine learning toolbox for Python~\citep{scikit13ml}.
+The dataset contains seven clusters but in two cases there are \emph{bridges} between the clusters.
+On the far right K-Means and WARD correctly divides the data where DBSCAN incorrectly groups both clusters together; shown in Figures~\ref{fig:kmeans},~\ref{fig:ward} and~\ref{fig:dbscan} respectively.
+DBSCAN deals well with the remaining data where other two algorithms fail.
+Centroid approaches leave large clusters divided due to nearby smaller clusters.
+
+
 \begin{figure}[ht]
    \centering
    \subfigure[K-Means]{
@@ -91,6 +114,7 @@ The EPS paramter sets the distance which the algorithm allow itself to jump and 
 
 
 \section{Conclusion and Further Work}
+
 
 \bibliographystyle{ecs}
 \bibliography{references}

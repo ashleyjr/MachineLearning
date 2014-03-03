@@ -101,7 +101,7 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <span class='comment'>%% ----------------------------------------------------------------</span><br>
 <span class='grouping'>\begin</span><span class='grouping'>{document}</span><br>
 <span class='command'>\frontmatter</span><br>
-<span class='command'>\title</span>      <span class='ignore'>{</span><span class='word2'>COMP6036</span><span class='ignore'>:</span> <span class='word2'>Advanced</span> <span class='word2'>Machine</span> <span class='word2'>Learning</span><span class='command'>\\</span><span class='ignore'>[</span><span class='word2'>1cm</span><span class='ignore'>]</span><br>
+<span class='command'>\title</span>      <span class='ignore'>{</span><span class='word2'>COMP6036</span><span class='ignore'>:</span> <span class='word2'>Advanced</span> <span class='word2'>Machine</span> <span class='word2'>Learning</span><span class='command'>\\</span><br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='word2'>An</span> <span class='word2'>investigation</span> <span class='word2'>into</span> <span class='word2'>DBSCAN</span><span class='ignore'>}</span><br>
 &nbsp;&nbsp;&nbsp;<br>
 <span class='command'>\addresses</span>  <span class='ignore'>{</span><span class='command'>\deptname</span><span class='command'>\\</span><span class='command'>\univname</span><span class='ignore'>}</span><br>
@@ -116,7 +116,9 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <br>
 <br>
 <span class='grouping'>\begin</span><span class='grouping'>{abstract}</span><br>
-<span class='word1'>Your</span> <span class='word1'>abstract</span> <span class='word1'>goes</span> <span class='word1'>here</span><br>
+<span class='word1'>DBSCAN</span> <span class='word1'>is</span> <span class='word1'>used</span> <span class='word1'>for</span> <span class='word1'>clustering</span> <span class='word1'>sparse</span> <span class='word1'>spatial</span> <span class='word1'>databases</span> <span class='word1'>using</span> <span class='word1'>data</span> <span class='word1'>point</span> <span class='word1'>density</span><span class='ignore'>.</span><br>
+<span class='word1'>The</span> <span class='word1'>algorithm</span> <span class='word1'>performs</span> <span class='word1'>well</span> <span class='word1'>at</span> <span class='word1'>this</span> <span class='word1'>but</span> <span class='word1'>has</span> <span class='word1'>some</span> <span class='word1'>shortcomings</span> <span class='word1'>when</span> <span class='word1'>applied</span> <span class='word1'>to</span> <span class='word1'>specific</span> <span class='word1'>tasks</span><span class='ignore'>.</span><br>
+<span class='word1'>Scalability</span> <span class='word1'>is</span> <span class='word1'>ones</span> <span class='word1'>of</span> <span class='word1'>its</span> <span class='word1'>major</span> <span class='word1'>advanatges</span><span class='ignore'>.</span><br>
 <span class='grouping'>\end</span><span class='grouping'>{abstract}</span><br>
 <br>
 <span class='command'>\mainmatter</span><br>
@@ -135,12 +137,33 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <br>
 <span class='command'>\section</span><span class='ignore'>{</span><span class='word2'>Technical</span> <span class='word2'>Explanation</span><span class='ignore'>}</span><br>
 <br>
-<span class='word1'>DBSCAN</span> <span class='word1'>uses</span> <span class='word1'>cluster</span> <span class='word1'>density</span> <span class='word1'>to</span> <span class='word1'>classify</span> <span class='word1'>data</span><span class='ignore'>.</span><br>
-<span class='word1'>It</span> <span class='word1'>tries</span> <span class='word1'>to</span> <span class='word1'>find</span> <span class='word1'>connectivity</span> <span class='word1'>between</span> <span class='word1'>data</span> <span class='word1'>poiunts</span> <span class='word1'>within</span> <span class='word1'>a</span> <span class='word1'>reasonable</span> <span class='word1'>distance</span><span class='ignore'>.</span><br>
-<span class='word1'>This</span> <span class='word1'>distance</span> <span class='word1'>is</span> <span class='word1'>passed</span> <span class='word1'>to</span> <span class='word1'>algorithm</span> <span class='word1'>as</span> <span class='word1'>an</span> <span class='word1'>input</span> <span class='word1'>parameter</span> <span class='word1'>and</span> <span class='word1'>can</span> <span class='word1'>be</span> <span class='word1'>tuned</span> <span class='word1'>to</span> <span class='word1'>give</span><br>
+<span class='word1'>DBSCAN</span> <span class='word1'>uses</span> <span class='word1'>the</span> <span class='word1'>notion</span> <span class='word1'>of</span> <span class='word1'>cluster</span> <span class='word1'>density</span> <span class='word1'>to</span> <span class='word1'>classify</span> <span class='word1'>data</span><span class='ignore'>.</span><br>
+<span class='word1'>It</span> <span class='word1'>is</span> <span class='word1'>intuitive</span> <span class='word1'>to</span> <span class='word1'>build</span> <span class='word1'>a</span> <span class='word1'>community</span> <span class='word1'>of</span> <span class='word1'>data</span> <span class='word1'>points</span> <span class='word1'>by</span> <span class='word1'>attempting</span> <span class='word1'>to</span> <span class='word1'>draw</span> <span class='word1'>a</span> <span class='word1'>path</span> <span class='word1'>of</span> <span class='word1'>connectivity</span><span class='ignore'>.</span><br>
+<span class='word1'>This</span> <span class='word1'>leads</span> <span class='word1'>to</span> <span class='word1'>the</span> <span class='word1'>first</span> <span class='word1'>input</span> <span class='word1'>parameter</span> <span class='word1'>to</span> <span class='word1'>the</span> <span class='word1'>algorithm</span><span class='ignore'>,</span> <span class='mathgroup'>$</span><span class='ignore'>\epsilon</span><span class='mathgroup'>$</span><span class='ignore'>,</span> <span class='word1'>a</span> <span class='word1'>distance</span> <span class='word1'>threshold</span> <span class='word1'>for</span> <span class='word1'>which</span> <span class='word1'>DBSCAN</span> <span class='word1'>is</span> <span class='word1'>permitted</span> <span class='word1'>to</span> <span class='word1'>move</span> <span class='word1'>yet</span> <span class='word1'>remain</span> <span class='word1'>in</span> <span class='word1'>the</span> <span class='word1'>same</span> <span class='word1'>cluster</span><span class='ignore'>.</span><br>
+<span class='word1'>Equation</span><span class='ignore'>~</span><span class='command'>\eqref</span><span class='ignore'>{</span><span class='ignore'>eqn</span><span class='ignore'>:</span><span class='ignore'>dist</span><span class='ignore'>}</span><span class='ignore'>,</span> <span class='word1'>adapted</span> <span class='word1'>from</span><span class='ignore'>~</span><span class='command'>\cite</span><span class='ignore'>{ester96dbscan}</span><span class='ignore'>,</span> <span class='word1'>is</span> <span class='word1'>the</span> <span class='word1'>basic</span> <span class='word1'>function</span> <span class='word1'>used</span> <span class='word1'>for</span> <span class='word1'>thresholding</span><span class='ignore'>;</span> <span class='word1'>euclidean</span> <span class='word1'>distance</span> <span class='word1'>is</span> <span class='word1'>used</span> <span class='word1'>in</span> <span class='word1'>this</span> <span class='word1'>case</span> <span class='word1'>but</span> <span class='word1'>the</span> <span class='word1'>measure</span> <span class='word1'>of</span> <span class='word1'>distance</span> <span class='word1'>can</span> <span class='word1'>be</span> <span class='word1'>replaced</span> <span class='word1'>with</span> <span class='word1'>a</span> <span class='word1'>Manhattan</span> <span class='word1'>norm</span> <span class='word1'>to</span> <span class='word1'>scale</span> <span class='word1'>down</span> <span class='word1'>computational</span> <span class='word1'>overheads</span><span class='ignore'>~</span><span class='command'>\citep</span><span class='ignore'>{krause86taxicab}</span><span class='ignore'>.</span><br>
+<br>
+<span class='command'>\newpage</span><br>
+<span class='grouping'>\begin</span><span class='grouping'>{equation}</span><br>
+	<span class='ignore'>N</span><span class='ignore'>(</span><span class='exclcommand'>\textbf</span><span class='ignore'>{p}</span><span class='ignore'>,</span><span class='exclcommand'>\textbf</span><span class='ignore'>{q}</span><span class='ignore'>,</span><span class='ignore'>\epsilon</span><span class='ignore'>)</span> <span class='ignore'>=</span> <span class='exclcommand'>\left</span><span class='ignore'>\{</span><br>
+&nbsp; <span class='exclgroup'>\begin</span><span class='exclgroup'>{array}</span><span class='ignore'>{l}</span><br>
+&nbsp; &nbsp; &nbsp; <span class='ignore'>1</span><span class='ignore'>,</span><span class='exclcommand'>\:</span> <span class='ignore'>|</span><span class='ignore'>|</span><span class='exclcommand'>\textbf</span><span class='ignore'>{p}</span> <span class='ignore'>-</span> <span class='exclcommand'>\textbf</span><span class='ignore'>{q}</span><span class='ignore'>|</span><span class='ignore'>|</span> <span class='exclcommand'>\leq</span> <span class='ignore'>\epsilon</span><span class='exclcommand'>\\</span><br>
+&nbsp; &nbsp; &nbsp; <span class='ignore'>0</span><span class='ignore'>,</span><span class='exclcommand'>\:</span> <span class='ignore'>|</span><span class='ignore'>|</span><span class='exclcommand'>\textbf</span><span class='ignore'>{p}</span> <span class='ignore'>-</span> <span class='exclcommand'>\textbf</span><span class='ignore'>{q}</span><span class='ignore'>|</span><span class='ignore'>|</span> <span class='ignore'>&gt;</span> <span class='ignore'>\epsilon
+&nbsp; &nbsp; </span><span class='exclgroup'>\end</span><span class='exclgroup'>{array}</span><span class='exclcommand'>\right</span><span class='ignore'>.</span><br>
+	<span class='exclcommand'>\:</span><span class='exclcommand'>\:</span><span class='ignore'>where</span><span class='exclcommand'>\:</span><span class='exclcommand'>\:</span> <span class='exclcommand'>\textbf</span><span class='ignore'>{q}</span><span class='ignore'>,</span><span class='exclcommand'>\textbf</span><span class='ignore'>{p}</span> <span class='exclcommand'>\in</span> <span class='exclcommand'>\textbf</span><span class='ignore'>{D}</span><br>
+	<span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>eqn</span><span class='ignore'>:</span><span class='ignore'>dist</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{equation}</span><br>
+<br>
+<span class='word1'>This</span> <span class='word1'>works</span> <span class='word1'>fine</span> <span class='word1'>until</span><br>
+<span class='command'>\section</span><span class='word2'>{Performance}</span><br>
 <br>
 <span class='word1'>The</span> <span class='word1'>graphs</span> <span class='word1'>in</span> <span class='word1'>Figure</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>compare</span><span class='ignore'>}</span> <span class='word1'>are</span> <span class='word1'>different</span> <span class='word1'>clustering</span> <span class='word1'>algorithms</span> <span class='word1'>applied</span> <span class='word1'>to</span> <span class='word1'>a</span> <span class='word1'>shape</span> <span class='word1'>dataset</span> <span class='word1'>taken</span> <span class='word1'>from</span><span class='ignore'>~</span><span class='command'>\cite</span><span class='ignore'>{gionis05cluster}</span><span class='ignore'>.</span> <br>
-<span class='word1'>Algorithms</span> <span class='word1'>were</span> <span class='word1'>taken</span> <span class='word1'>from</span> <span class='word1'>a</span> <span class='word1'>machine</span> <span class='word1'>learning</span> <span class='word1'>toolbox</span> <span class='word1'>for</span> <span class='word1'>Python</span><span class='ignore'>~</span><span class='command'>\citep</span><span class='ignore'>{scikit13ml}</span><span class='ignore'>.</span> <br>
+<span class='word1'>Algorithms</span> <span class='word1'>were</span> <span class='word1'>taken</span> <span class='word1'>from</span> <span class='word1'>a</span> <span class='word1'>machine</span> <span class='word1'>learning</span> <span class='word1'>toolbox</span> <span class='word1'>for</span> <span class='word1'>Python</span><span class='ignore'>~</span><span class='command'>\citep</span><span class='ignore'>{scikit13ml}</span><span class='ignore'>.</span><br>
+<span class='word1'>The</span> <span class='word1'>dataset</span> <span class='word1'>contains</span> <span class='word1'>seven</span> <span class='word1'>clusters</span> <span class='word1'>but</span> <span class='word1'>in</span> <span class='word1'>two</span> <span class='word1'>cases</span> <span class='word1'>there</span> <span class='word1'>are</span> <span class='command'>\emph</span><span class='word1'>{bridges}</span> <span class='word1'>between</span> <span class='word1'>the</span> <span class='word1'>clusters</span><span class='ignore'>.</span><br>
+<span class='word1'>On</span> <span class='word1'>the</span> <span class='word1'>far</span> <span class='word1'>right</span> <span class='word1'>K-Means</span> <span class='word1'>and</span> <span class='word1'>WARD</span> <span class='word1'>correctly</span> <span class='word1'>divides</span> <span class='word1'>the</span> <span class='word1'>data</span> <span class='word1'>where</span> <span class='word1'>DBSCAN</span> <span class='word1'>incorrectly</span> <span class='word1'>groups</span> <span class='word1'>both</span> <span class='word1'>clusters</span> <span class='word1'>together</span><span class='ignore'>;</span> <span class='word1'>shown</span> <span class='word1'>in</span> <span class='word1'>Figures</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>kmeans</span><span class='ignore'>}</span><span class='ignore'>,</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>ward</span><span class='ignore'>}</span> <span class='word1'>and</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>dbscan</span><span class='ignore'>}</span> <span class='word1'>respectively</span><span class='ignore'>.</span><br>
+<span class='word1'>DBSCAN</span> <span class='word1'>deals</span> <span class='word1'>well</span> <span class='word1'>with</span> <span class='word1'>the</span> <span class='word1'>remaining</span> <span class='word1'>data</span> <span class='word1'>where</span> <span class='word1'>other</span> <span class='word1'>two</span> <span class='word1'>algorithms</span> <span class='word1'>fail</span><span class='ignore'>.</span><br>
+<span class='word1'>Centroid</span> <span class='word1'>approaches</span> <span class='word1'>leave</span> <span class='word1'>large</span> <span class='word1'>clusters</span> <span class='word1'>divided</span> <span class='word1'>due</span> <span class='word1'>to</span> <span class='word1'>nearby</span> <span class='word1'>smaller</span> <span class='word1'>clusters</span><span class='ignore'>.</span><br>
+<br>
+<br>
 <span class='grouping'>\begin</span><span class='grouping'>{figure}</span><span class='ignore'>[</span><span class='ignore'>ht</span><span class='ignore'>]</span><br>
 &nbsp;  <span class='exclcommand'>\centering</span><br>
 &nbsp; <span class='exclcommand'>\subfigure</span><span class='option'>[K-Means]</span><span class='ignore'>{</span><br>
@@ -175,6 +198,7 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <br>
 <span class='command'>\section</span><span class='ignore'>{</span><span class='word2'>Conclusion</span> <span class='word2'>and</span> <span class='word2'>Further</span> <span class='word2'>Work</span><span class='ignore'>}</span><br>
 <br>
+<br>
 <span class='command'>\bibliographystyle</span><span class='ignore'>{ecs}</span><br>
 <span class='command'>\bibliography</span><span class='ignore'>{references}</span><br>
 <br>
@@ -188,19 +212,20 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <ul class='count'>
 <li class='header'>File: report.tex</li>
 <li>Encoding: ascii</li>
-<li>Words in text: 258</li>
+<li>Words in text: 406</li>
 <li>Words in headers: 18</li>
 <li>Words in float captions: 10</li>
-<li>Number of headers: 4</li>
+<li>Number of headers: 5</li>
 <li>Number of floats: 2</li>
-<li>Number of math inlines: 0</li>
-<li>Number of math displayed: 0</li>
+<li>Number of math inlines: 1</li>
+<li>Number of math displayed: 1</li>
 <li>Subcounts:</li>
 <span class='subcount'>
 <li class='fielddesc'>&nbsp; text+headers+captions (#headers/#floats/#inlines/#displayed)</li>
-  <li>15+9+0 (1/0/0/0) _top_</li>
+  <li>45+8+0 (1/0/0/0) _top_</li>
   <li>136+3+0 (1/0/0/0) Section: Motivation for Algorithm</li>
-  <li>107+2+10 (1/2/0/0) Section: Technical Explanation</li>
+  <li>92+2+0 (1/0/1/1) Section: Technical Explanation</li>
+  <li>133+1+10 (1/2/0/0) Section: Performance</li>
   <li>0+4+0 (1/0/0/0) Section: Conclusion and Further Work</li>
 </span>
 </ul>

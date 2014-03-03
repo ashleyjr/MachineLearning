@@ -26,8 +26,8 @@ eps = 0.47
 min_samples = 1
 score = []
 para = []
-for test in range(1,240):
-	eps = float(test)/float(400)
+for test in range(1,480):
+	eps = float(test)/float(800)
 	##############################################################################
 	# Compute DBSCAN
 	db = DBSCAN(eps, min_samples).fit(X)
