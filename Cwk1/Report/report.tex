@@ -43,7 +43,7 @@ Scalability is ones of its major advanatges.
 
 \section{Motivation for Algorithm}
 
-DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is an application of machine learning introduced by~\cite{ester96dbscan}.
+DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is an unsupervised application of machine learning introduced by~\cite{ester96dbscan}.
 Intended to address Spatial Database Systems (SDBS) which can be produced from natural geometric and geographical datasets or applications such a layout for integrated circuit design~\citep{guting94sdbs}.
 It has three main objectives.
 To minimise the required domain knowledge needed to set input parameters, have the capability to discover clusters of arbitrary shapes and to perform well on large spatial databases.
@@ -57,7 +57,7 @@ Apart from traditional clustering algorithms, such a K-means, DBSCAN was a break
 DBSCAN uses the notion of cluster density to classify data.
 It is intuitive to build a community of data points by attempting to draw a path of connectivity.
 This leads to the first input parameter to the algorithm, $\epsilon$, a distance threshold for which DBSCAN is permitted to move yet remain in the same cluster.
-Equation~\eqref{eqn:dist}, adapted from~\cite{ester96dbscan}, is the basic function used for thresholding; euclidean distance is used in this case but the measure of distance can be replaced with a Manhattan norm to scale down computational overheads~\citep{krause86taxicab}.
+Equation~\eqref{eqn:dist}, adapted from~\cite{ester96dbscan}, is the basic function used to determine membership by thresholding; euclidean distance is used in this case but the measure of distance can be replaced with a Manhattan norm to scale down computational overheads~\citep{krause86taxicab}.
 
 \newpage
 \begin{equation}
@@ -70,7 +70,30 @@ Equation~\eqref{eqn:dist}, adapted from~\cite{ester96dbscan}, is the basic funct
 	\label{eqn:dist}
 \end{equation}
 
-This works fine until
+
+This approach is simple for compact clusters but when noise is introduced the algorithm will identify a few points as a whole cluster.
+A second threshold is introduced, however this is unnecessary to perform basic DBSCAN clustering, to set the minimum number of members a cluster can have.
+This parameter, $\lambda$, if successfully applied to Equation~\eqref{eqn:inside} decides when to build a cluster around the point.
+Equation~\eqref{eqn:member} takes the sum of connected datapoints attributed to single point used for comparison and outputs the number of all datapoints in the input space which are connected. 
+
+\begin{equation}
+	\lambda \leq C(\textbf{p},\epsilon) 
+	\label{eqn:inside}
+\end{equation}
+\begin{equation}
+	C(\textbf{p},\epsilon) = \sum\limits_{\textbf{q}\:\in\:\textbf{D}\atop\textbf{q}\:\neq\:\textbf{p}} N(\textbf{p},\textbf{q},\epsilon)
+	\label{eqn:member}
+\end{equation}
+
+It is clear there is a lot of scope for optimisation in practice.
+A list containing all datapoints at the start of the algorithm can be used to check off point which have been found to belong to a cluster.
+This means for an input space containing $n$ clusters that can be perfectly segmented by DBSCAN requires only $n$ calls of Equation~\eqref{eqn:member}.
+
+\begin{equation}
+	C(\textbf{B},\textbf{p},\epsilon) = \sum\limits_{\textbf{q}\:\in\:\textbf{D}\atop\textbf{q}\:\neq\:\textbf{p}} N(\textbf{p},\textbf{q},\epsilon)
+	\label{eqn:optimised}
+\end{equation}
+
 \section{Performance}
 
 The graphs in Figure~\ref{fig:compare} are different clustering algorithms applied to a shape dataset taken from~\cite{gionis05cluster}. 
