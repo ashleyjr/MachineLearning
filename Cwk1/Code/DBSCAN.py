@@ -24,16 +24,13 @@ X = StandardScaler().fit_transform(X)
 # DBSCAN Parameters
 eps = 0.2
 min_samples = 1
-
 ##############################################################################
 # Compute DBSCAN
 db = DBSCAN(eps, min_samples).fit(X)
 core_samples = db.core_sample_indices_
 labels = db.labels_
-
 # Number of clusters in labels, ignoring noise if present.
 n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
-
 
 ##############################################################################
 # Plot result
