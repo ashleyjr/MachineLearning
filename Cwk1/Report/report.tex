@@ -89,10 +89,11 @@ The parameter, $\lambda$, if successfully applied to Equation~\eqref{eqn:inside}
 	\label{eqn:inside}
 \end{equation}
 
-A low dimensional representation of the constraints used in DBSCAN is held in Figure~\ref{fig:circles} which contains seven points labelled \textbf{A} to \textbf{H}.
-A string of points are density connected in the centre of the diagram, two points on the left and is \textbf{G} is unconnected.
-Increasing $\epsilon$ will merge these three possible clusters.
-Equation~\eqref{eqn:clusters} describes how possible values of $\lambda$ can change the clustering of Figure~\ref{fig:circles}.
+A low dimensional representation of the constraints held by DBSCAN is shown in Figure~\ref{fig:circles}.    % which contains eight points labelled \textbf{A} to \textbf{H}.
+Six points, \textbf{C} to \textbf{G}, are density connected in the centre of the diagram, \textbf{A} and \textbf{B} form another connection while \textbf{H} is unconnected.
+The locus of each point is set by $\epsilon$ and must engulf another point for the algorithm to consider them connected.
+%Increasing $\epsilon$ will eventually merge these three possible clusters.
+Equation~\eqref{eqn:clusters} describes how possible values of $\lambda$, while keeping $\epsilon$ fixed, can change the clustering of Figure~\ref{fig:circles}.
 
 
 \begin{figure}[ht]
@@ -127,11 +128,11 @@ Formally a set of unclassified vectors, $\textbf{b} \in \textbf{x} $, can be def
 
 The worst case performance of the basic algorithm is determined by the number of end cluster found by DBSCAN compared to the number of input patterns.
 If all the input patterns combined with a massive value of $\epsilon$ produce single cluster classification it is possible that $O(n)$ holds; this is based on the number of times Equation~\eqref{eqn:dist} has to be computed.
-Equation~\eqref{eqn:order} shows how as the number of clusters increases the algorithm tends towards $O(n^2)$.
+Equation~\eqref{eqn:order} shows how that as the number of clusters increase the algorithm tends towards $O(n^2)$.
 The first input pattern requires $n-1$ calls of Equation~\eqref{eqn:dist} regardless but in the worst case is has no reachable neighbours.
 The second requires $n-2$ as one pattern has already been identified as solitary yet again has no reachable neighbours.
 If this continues so that the last pattern is known to be solitary then Equation~\eqref{eqn:order} shows how this geometric progression places an lower bound on performances.
-A well tuned value of $\epsilon$ will allow the algorithm to complete in polynomial time.
+Low order polynomial time complexity is expected for an algorithm designed for large datasets.
 
 \begin{equation}
 	\sum\limits_{i=1}^{n-1} i = \frac{n}{2}(n - 1) \approx O(n^2)	
@@ -139,14 +140,14 @@ A well tuned value of $\epsilon$ will allow the algorithm to complete in polynom
 \end{equation}
 
 
-DBSCAN suffers from sensitivity to input parameters and clustering in high dimensional space~\cite{han01survey}.
+DBSCAN suffers from sensitivity to input parameters and also clustering in high dimensional space~\citep{han01survey}.
 When attempting to cluster regions of different density it is clear that this is a major problem for the algorithm in certain applications. 
 The graphs in Figure~\ref{fig:compare} are different clustering algorithms applied to a shape dataset taken from~\cite{gionis05cluster} which is chosen to empathise some less obvious shortcomings.
 Chosen for comparison is K-Means because it is arguably the most well-known clustering algorithm and WARD because of its performance on this dataset when compared against other available algorithms.
-Implementations\footnote{Code in Appendix~\ref{code}} were taken from a machine learning toolbox for Python~\citep{scikit13ml}.
+Implementations\footnote{Code using the toolkit in Appendix~\ref{code}} were taken from a machine learning toolbox for Python~\citep{scikit13ml}.
 The dataset contains seven clusters but in two cases there are \emph{bridges} between the clusters.
-On the far right K-Means and WARD correctly divides the data where DBSCAN incorrectly groups both clusters together; shown in Figures~\ref{fig:kmeans},~\ref{fig:ward} and~\ref{fig:dbscan} respectively.
-DBSCAN deals well with the remaining data where the other two algorithms fail due to its ability to negate relatively tight clusters.
+On the far right of the space K-Means and WARD correctly divides the data where DBSCAN incorrectly groups both clusters together; shown in Figures~\ref{fig:kmeans},~\ref{fig:ward} and~\ref{fig:dbscan} respectively.
+DBSCAN deals well with the remaining data where the other two algorithms fail due to ability to negate relatively tight clusters.
 These sorts of issues are the reason for $\epsilon$ sensitivity. 
 
 \begin{figure}[ht]
@@ -170,10 +171,11 @@ These sorts of issues are the reason for $\epsilon$ sensitivity.
 The algorithm exhibits variation in performance as per the standard bias-variance dilemma.
 Figure~\ref{fig:error} shows how the error varies for with $\epsilon$ when applied to data used in Figure~\ref{fig:compare}.
 Objectively DBSCAN doesn't perform well on this dataset missing two clusters completely however this is a crafted cornerstone case intended to trap algorithms and is not particularly sparse.
+The two algorithms used for comparison both perform worse than DBSCAN.
 
 \begin{figure}[ht]
    \centering
-    \includegraphics[height = 5cm,width = 8cm]{error.pdf}
+    \includegraphics[height = 6cm]{error.pdf}
    \caption{Generalisation error while varying the $\epsilon$ input parameter.}
    \label{fig:error}
 \end{figure}
@@ -198,6 +200,7 @@ As per most unsupervised clustering algorithms this is particularly appealing fo
 There are downsides to algorithm such as sensitivity to input parameters and poor performance on mixed density clustering.
 As described in Section~\ref{performance} there are also cornerstone cases which can trap the density process but are easily handled by standard centroid approaches.
 
+\newpage
 
 %TC:ignore
 \bibliographystyle{ecs}
