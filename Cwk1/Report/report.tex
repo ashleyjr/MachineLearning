@@ -36,8 +36,8 @@
 The paper chosen for the research report is entitled \textbf{A density-based algorithm for discovering clusters in large spatial databases with noise} which introduces the algorithm DBSCAN.
 DBSCAN is used for clustering sparse spatial databases using data point density.
 The algorithm performs well at this but has some shortcomings when applied to tasks which hold clusters of different densities.
-Only one priori, cluster density, is required but this can be difficult to tune in high dimensional space.
-The algorithm is compared against other common cluster implementations using a machine learning toolkit for Python.
+Only one priori, cluster density, is required but the algorithm is very sensitive to this and can be difficult to tune in high dimensional space.
+DBSCAN is compared against other common cluster implementations using a machine learning toolkit for Python before more recent extensions are considered.
 \end{abstract}
 
 %TC:endignore
@@ -47,7 +47,7 @@ The algorithm is compared against other common cluster implementations using a m
 \section{Motivation for Algorithm}
 
 DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is an unsupervised application of machine learning introduced by~\cite{ester96dbscan}.
-Intended to address Spatial Database Systems (SDBS) which can be produced from naturally occurring geometric and geographical datasets or applications such a layout for integrated circuit design~\citep{guting94sdbs}.
+Intended to address Spatial Database Systems (SDBS) which can be produced from naturally occurring geometric and geographical data or engineering applications such a layout for integrated circuit design~\citep{guting94sdbs}.
 It has three main objectives.
 To minimise the required domain knowledge needed to set input parameters, have the capability to discover clusters of arbitrary shapes and to perform well on large spatial databases.
 
@@ -61,7 +61,7 @@ DBSCAN uses cluster density to classify data.
 It is intuitive to build a community of data points by attempting to draw a path of connectivity between points.
 This leads to the first input parameter to the algorithm, $\epsilon$, which is a threshold for the distance that DBSCAN is permitted to move yet remain in the same cluster.
 Equation~\eqref{eqn:dist}, adapted from~\cite{ester96dbscan}, is the basic function used to determine membership by thresholding; euclidean distance is used in this case but the measure of distance can be replaced with a Manhattan norm to scale down computational overheads therefore favouring large datasets~\citep{krause86taxicab}.
-Only two input patterns are compare at once and all belong to the set of training data, $\textbf{x}$, containing $n$ input patterns.
+Only two input patterns are compared at once and all belong to the set of training data, $\textbf{x}$, containing $n$ input patterns.
 
 \begin{equation}
 	N(\textbf{p},\textbf{q},\epsilon) = \left\{
@@ -80,12 +80,12 @@ Equation~\eqref{eqn:member} takes the sum of connected data points attributed to
 The parameter, $\lambda$, if successfully applied to Equation~\eqref{eqn:inside} decides when to build a cluster around the point.
 
 \begin{equation}
-	C(\textbf{x}_i,\epsilon) =  \sum\limits_{j=1 \atop j\:\neq\:i}^n N(\textbf{x}_i,\textbf{x}_j,\epsilon)	
+	C(\textbf{x}_i,\textbf{x},\epsilon) =  \sum\limits_{j=1 \atop j\:\neq\:i}^n N(\textbf{x}_i,\textbf{x}_j,\epsilon)	
 	\label{eqn:member}
 \end{equation}
 
 \begin{equation}
-	\lambda \leq C(\textbf{p},\epsilon) 
+	1 \leq \lambda \leq C(\textbf{p},\epsilon)\:\:where\:\:\lambda \in \mathbb{N}
 	\label{eqn:inside}
 \end{equation}
 
@@ -117,19 +117,36 @@ Equation~\eqref{eqn:clusters} describes how possible values of $\lambda$ can cha
 
 
 It is clear there is a lot of scope for optimisation in practice.
-A list containing all datapoints at the start of the algorithm can be used to check off points which have been found to belong to a cluster.
+A list containing all data points at the start of the algorithm can be used to check off points which have been found to belong to a cluster.
 This means for an input space containing $\alpha$ clusters that can be perfectly segmented by DBSCAN requires only $\alpha$ calls of Equation~\eqref{eqn:member}.
-Formally a set of unclassified vectors, $\textbf{b} \in \textbf{x}$, can be defined and passed to Equation~\eqref{eqn:member} requiring much fewer evaluations. 
+Formally a set of unclassified vectors, $\textbf{b} \in \textbf{x} $, can be defined and passed to Equation~\eqref{eqn:member} requiring much fewer evaluations. 
 
 
 \section{Performance}
 
-The graphs in Figure~\ref{fig:compare} are different clustering algorithms applied to a shape dataset taken from~\cite{gionis05cluster}.
+The worst case performance of the basic algorithm is determined by the number of end cluster found by DBSCAN compared to the number of input patterns.
+If all the input patterns combined with a massive value of $\epsilon$ produce single cluster classification it is possible that $O(n)$ holds; this is based on the number of times Equation~\eqref{eqn:dist} has to be computed.
+Equation~\eqref{eqn:order} shows how as the number of clusters increases the algorithm tends towards $O(n^2)$.
+The first input pattern requires $n-1$ calls of Equation~\eqref{eqn:dist} regardless but in the worst case is has no reachable neighbours.
+The second requires $n-2$ as one pattern has already been identified as solitary yet again has no reachable neighbours.
+If this continues so that the last pattern is known to be solitary then Equation~\eqref{eqn:order} shows how this geometric progression places an lower bound on performances.
+A well tuned value of $\epsilon$ will allow the algorithm to complete in polynomial time.
+
+\begin{equation}
+	\sum\limits_{i=1}^{n-1} i = \frac{n}{2}(n - 1) \approx O(n^2)	
+	\label{eqn:order}
+\end{equation}
+
+
+DBSCAN suffers from sensitivity to input parameters and clustering in high dimensional space~\cite{han01survey}.
+When attempting to cluster regions of different density it is clear that this is a major problem for the algorithm in certain applications. 
+The graphs in Figure~\ref{fig:compare} are different clustering algorithms applied to a shape dataset taken from~\cite{gionis05cluster} which is chosen to empathise some less obvious shortcomings.
 Chosen for comparison is K-Means because it is arguably the most well-known clustering algorithm and WARD because of its performance on this dataset when compared against other available algorithms.
-Implementations were taken from a machine learning toolbox for Python~\citep{scikit13ml}.
+Implementations\footnote{Code in Appendix~\ref{code}} were taken from a machine learning toolbox for Python~\citep{scikit13ml}.
 The dataset contains seven clusters but in two cases there are \emph{bridges} between the clusters.
 On the far right K-Means and WARD correctly divides the data where DBSCAN incorrectly groups both clusters together; shown in Figures~\ref{fig:kmeans},~\ref{fig:ward} and~\ref{fig:dbscan} respectively.
 DBSCAN deals well with the remaining data where the other two algorithms fail due to its ability to negate relatively tight clusters.
+These sorts of issues are the reason for $\epsilon$ sensitivity. 
 
 \begin{figure}[ht]
    \centering
@@ -151,7 +168,7 @@ DBSCAN deals well with the remaining data where the other two algorithms fail du
 
 The algorithm exhibits variation in performance as per the standard bias-variance dilemma.
 Figure~\ref{fig:error} shows how the error varies for with $\epsilon$ when applied to data used in Figure~\ref{fig:compare}.
-Objectively DBSCAN doesn't perform well on this dataset missing two clusters completely however this is crafted cornerstone case intended to trap algorithms.
+Objectively DBSCAN doesn't perform well on this dataset missing two clusters completely however this is a crafted cornerstone case intended to trap algorithms and is not particularly sparse.
 
 \begin{figure}[ht]
    \centering
@@ -164,8 +181,8 @@ Objectively DBSCAN doesn't perform well on this dataset missing two clusters com
 
 
 \section{Extensions}
-Since the creation of this algorithm extension have been trialed . 
 
+The sensitivity to input parameters has tried to 
 \cite{lian07ldbscan} considered the difficulty to select a value for $\epsilon$ and adapted the algorithm to LDBSCAN (Local-DBSCAN).
 
 \section{Conclusions}
@@ -184,6 +201,7 @@ There are downsides to algorithm
 
 \newpage
 \section{Code Listings}
+\label{code}
 \lstset{ %
      language=Python,                % the language of the code
   basicstyle=\footnotesize,           % the size of the fonts that are used for the code

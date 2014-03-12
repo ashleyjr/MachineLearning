@@ -41,12 +41,12 @@ for test in range(1,480):
 	score[test-1] = 1 - (score[test-1]*10)
 	print("%0.3f: Score: %0.3f" % (eps, score[test-1]))
 pl.plot(para,score, '.', markeredgecolor='k', markersize=10)
-coefs = np.lib.polyfit(para, score, 4) #4
-fit_y = np.lib.polyval(coefs, para) #5
-pl.plot(para, fit_y, 'b--') #6
+#coefs = np.lib.polyfit(para, score, 4) #4
+#fit_y = np.lib.polyval(coefs, para) #5
+#pl.plot(para, fit_y, 'b--') #6
 pl.ylim([0,1])
 pl.grid()
-pl.xlabel('EPS')
+pl.xlabel('EPSILON')
 pl.ylabel('Generalisation Error')
 raw_input("Press Enter to continue...")
 
