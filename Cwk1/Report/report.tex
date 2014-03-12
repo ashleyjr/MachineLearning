@@ -123,6 +123,7 @@ Formally a set of unclassified vectors, $\textbf{b} \in \textbf{x} $, can be def
 
 
 \section{Performance}
+\label{performance}
 
 The worst case performance of the basic algorithm is determined by the number of end cluster found by DBSCAN compared to the number of input patterns.
 If all the input patterns combined with a massive value of $\epsilon$ produce single cluster classification it is possible that $O(n)$ holds; this is based on the number of times Equation~\eqref{eqn:dist} has to be computed.
@@ -182,13 +183,21 @@ Objectively DBSCAN doesn't perform well on this dataset missing two clusters com
 
 \section{Extensions}
 
-The sensitivity to input parameters has tried to 
-\cite{lian07ldbscan} considered the difficulty to select a value for $\epsilon$ and adapted the algorithm to LDBSCAN (Local-DBSCAN).
+The algorithm was revisited by its creators when they devised Generalzed-DBSCAN~\citep{ester98gdbscan}.
+GDBSCAN attempts to reduce sensitivity to input parameters by comparing prospective additions to a cluster against the sparsity of the rest of the cluster. 
+There's also HDBSCAN (Hierarchical) which focuses on parallel optimisation~\citep{li11}.
+A subset of the original authors went on the create OPTICS (Ordering Points to Identify the Clustering Structure) which is also a density based algorithm~\citep{Ankerst99optics}.
+This proved to become very popular as it performs well on datasets containing clusters of varying density.    
+\cite{lian07ldbscan} developed LDBSCAN (Local-DBSCAN) which draw on both DBSCAN and OPTICS to produce an easily tunable algorithm that adapts to local cluster density.
+
 
 \section{Conclusions}
-DBSCAN performs well on spatial database and can be optimised to be extremely efficient.
-As per most unsupervised clustering algorithms this is particularly appealing for good results with using simple methods. 
-There are downsides to algorithm
+DBSCAN performs well on spatial databases and can be optimised to be extremely efficient.
+Datasets which are both large and spatial are common for which this algorithm is designed to classifiy.
+As per most unsupervised clustering algorithms this is particularly appealing for good results whilst using simple methods. 
+There are downsides to algorithm such as sensitivity to input parameters and poor performance on mixed density clustering.
+As described in Section~\ref{performance} there are also cornerstone cases which can trap the density process but are easily handled by standard centroid approaches.
+
 
 %TC:ignore
 \bibliographystyle{ecs}
