@@ -33,7 +33,7 @@
 
 
 \begin{abstract}
-The paper chosen for the research report is entitled \textbf{A density-based algorithm for discovering clusters in large spatial databases with noise} where the algorithm DBSCAN is introduced.
+The paper chosen for the research report is entitled \textbf{A density-based algorithm for discovering clusters in large spatial databases with noise} which introduces the algorithm DBSCAN.
 DBSCAN is used for clustering sparse spatial databases using data point density.
 The algorithm performs well at this but has some shortcomings when applied to tasks which hold clusters of different densities.
 Only one priori, cluster density, is required but this can be difficult to tune in high dimensional space.
@@ -47,21 +47,21 @@ The algorithm is compared against other common cluster implementations using a m
 \section{Motivation for Algorithm}
 
 DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is an unsupervised application of machine learning introduced by~\cite{ester96dbscan}.
-Intended to address Spatial Database Systems (SDBS) which can be produced from natural geometric and geographical datasets or applications such a layout for integrated circuit design~\citep{guting94sdbs}.
+Intended to address Spatial Database Systems (SDBS) which can be produced from naturally occurring geometric and geographical datasets or applications such a layout for integrated circuit design~\citep{guting94sdbs}.
 It has three main objectives.
 To minimise the required domain knowledge needed to set input parameters, have the capability to discover clusters of arbitrary shapes and to perform well on large spatial databases.
 
 At the time of creation the algorithms was compared to a recent development called CALARANS~\citep{ng94clarans} which is an extension of CLARA (Clustering LARge Applications)~\citep{kaufman90clara}.
 Both algorithms are intended for use on large databases but CLARANS uses random noise to improve performance.
-Apart from traditional clustering algorithms, such a K-means, DBSCAN was a breakthrough in terms of a density approach to datasets.
+Apart from traditional clustering algorithms where first principles are introduced, such a K-means, DBSCAN was a breakthrough in terms of a density approach to datasets.
 
 \section{Technical Explanation}
 
 DBSCAN uses cluster density to classify data.
 It is intuitive to build a community of data points by attempting to draw a path of connectivity between points.
 This leads to the first input parameter to the algorithm, $\epsilon$, which is a threshold for the distance that DBSCAN is permitted to move yet remain in the same cluster.
-Equation~\eqref{eqn:dist}, adapted from~\cite{ester96dbscan}, is the basic function used to determine membership by thresholding; euclidean distance is used in this case but the measure of distance can be replaced with a Manhattan norm to scale down computational overheads~\citep{krause86taxicab}.
-Only two input patterens are compare at once and all belong to the set of training data, $\textbf{x}$, containing $n$ input patterns.
+Equation~\eqref{eqn:dist}, adapted from~\cite{ester96dbscan}, is the basic function used to determine membership by thresholding; euclidean distance is used in this case but the measure of distance can be replaced with a Manhattan norm to scale down computational overheads therefore favouring large datasets~\citep{krause86taxicab}.
+Only two input patterns are compare at once and all belong to the set of training data, $\textbf{x}$, containing $n$ input patterns.
 
 \begin{equation}
 	N(\textbf{p},\textbf{q},\epsilon) = \left\{
@@ -75,24 +75,25 @@ Only two input patterens are compare at once and all belong to the set of traini
 
 
 This approach is simple for compact clusters but when noise is introduced the algorithm will identify a few points as a whole cluster.
-This is down to a badly tuned value for $\epsilon$ but can be negated by introducing a second threshold to set the minimum number of members a cluster can have however this is unnecessary to perform basic DBSCAN clustering.
-This parameter, $\lambda$, if successfully applied to Equation~\eqref{eqn:inside} decides when to build a cluster around the point.
-Equation~\eqref{eqn:member} takes the sum of connected datapoints attributed to a single point which used for the comparison in Equation~\eqref{eqn:inside}. 
+This is possibly down to a badly tuned value for $\epsilon$ but can be negated by introducing a second threshold to set the minimum number of members a cluster can have however this is unnecessary to perform basic DBSCAN clustering.
+Equation~\eqref{eqn:member} takes the sum of connected data points attributed to a single point which used for the comparison in Equation~\eqref{eqn:inside}. 
+The parameter, $\lambda$, if successfully applied to Equation~\eqref{eqn:inside} decides when to build a cluster around the point.
 
-A low dimensional representation of the constraints used in DBSCAN is held in Figure~\ref{fig:circles} which contains seven points labelled \textbf{A} to \textbf{G}..
-A string of points are density connected in the centre of the diagram but two point \textbf{A} and \textbf{G} are unconnected.
-Increasing $\epsilon$ will introduce the right point to the growing cluster first then the left point.
-In this case $\lambda$ set to $1$ would produce $3$ clusters, no clusters if above $5$ and one cluster otherwise.
+\begin{equation}
+	C(\textbf{x}_i,\epsilon) =  \sum\limits_{j=1 \atop j\:\neq\:i}^n N(\textbf{x}_i,\textbf{x}_j,\epsilon)	
+	\label{eqn:member}
+\end{equation}
 
 \begin{equation}
 	\lambda \leq C(\textbf{p},\epsilon) 
 	\label{eqn:inside}
 \end{equation}
 
-\begin{equation}
-	C(\textbf{x}_i,\epsilon) =  \sum\limits_{j=1 \atop j\:\neq\:i}^n N(\textbf{x}_i,\textbf{x}_j,\epsilon)	
-	\label{eqn:member}
-\end{equation}
+A low dimensional representation of the constraints used in DBSCAN is held in Figure~\ref{fig:circles} which contains seven points labelled \textbf{A} to \textbf{H}.
+A string of points are density connected in the centre of the diagram, two points on the left and is \textbf{G} is unconnected.
+Increasing $\epsilon$ will merge these three possible clusters.
+Equation~\eqref{eqn:clusters} describes how possible values of $\lambda$ can change the clustering of Figure~\ref{fig:circles}.
+
 
 \begin{figure}[ht]
    \centering
@@ -100,6 +101,19 @@ In this case $\lambda$ set to $1$ would produce $3$ clusters, no clusters if abo
    \caption{2D application of DBSCAN.}
    \label{fig:circles}
 \end{figure}
+
+\begin{equation}
+	\# Clusters = \left\{
+		\begin{array}{l}
+    		0\:if\; \lambda \geq 6\\
+    		1\:if\; \lambda = 5 \\
+			2\:if\; 2 \leq \lambda \leq 5 \\
+			3\:if\; \lambda = 1\\
+  		\end{array} \right.
+	\label{eqn:clusters}
+\end{equation}
+
+
 
 
 It is clear there is a lot of scope for optimisation in practice.
