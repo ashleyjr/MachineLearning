@@ -21,7 +21,7 @@
 
 % Set parameters and directories (%%% CHANGE THAT %%%)
 %select_num=40;                  % Number of features to select.
-clear
+
 dataset={'arcene', 'dexter', 'dorothea', 'gisette', 'madelon'};
 dataset={'dexter'};
 method='SLP';                % Your method name.
@@ -83,7 +83,7 @@ for k=1:length(dataset)
 	ERR_select_num = 1;
 	maxAUC = 0;
 	minERR = 1;
-	for select_num=1:50
+	for select_num=1:100
 		% Select some features
 		idx_feat = feval([method '_feat_select'], X_train, Y_train, select_num);
 		% Train some classifier using the selected features
@@ -138,7 +138,7 @@ for k=1:length(dataset)
 	grid on;
 
 	fprintf('\nOptimised\n\n')
-	select_num = (ERR_select_num + AUC_select_num)./2;
+	select_num = 100%(ERR_select_num + AUC_select_num)./2;
 
 	% Select some features
 	idx_feat = feval([method '_feat_select'], X_train, Y_train, select_num);
