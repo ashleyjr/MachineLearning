@@ -1,18 +1,16 @@
 clear
 addpath('../Common')
 dataset={'arcene', 'dexter', 'dorothea', 'gisette', 'madelon'};
-%dataset={'dexter'};
-method='S';                % Your method name.
-where_my_data_is='../';            % This is the path to your data and results are
-                                % e.g. c:/users/data/nips/ or /usr/home/iguyon/ 
-                                % (do not forget the last slash)
-
-data_dir=[where_my_data_is 'Data'] % Wehre you put the five data directories dowloaded.
-output_dir=[where_my_data_is 'Results/' method] % The outputs of a given method.
+dataset={'dexter'};
+method=('SLP')
+where_my_data_is='../';            						% This is the path to your data and results are
+data_dir=[where_my_data_is 'Data'] 						% Wehre you put the five data directories dowloaded.
+output_dir=[where_my_data_is 'Results/' method] 		% The outputs of a given method.
 status=mkdir(where_my_data_is, ['Results/' method]);
-zip_dir=[where_my_data_is 'Zipped']; % Zipped files ready to go!
+zip_dir=[where_my_data_is 'Zipped']; 					% Zipped files ready to go!
 status=mkdir(where_my_data_is, 'Zipped');
     
+
 for k=1:length(dataset)
 
     % Input and output directories 
@@ -21,127 +19,61 @@ for k=1:length(dataset)
 	input_name=[input_dir '/' data_name]
 	output_name=[output_dir '/' data_name]
 	fprintf('\n/|\\-/|\\-/|\\-/|\\ Loading and checking dataset %s /|\\-/|\\-/|\\-/|\\\n\n', upper(data_name));
+
 	% Data parameters and statistics
 	p=read_parameters([input_name '.param'])
 	fprintf('-- %s parameters and statistics -- \n\n', upper(data_name));
 	print_parameters(p);
+
     % Read the data
     fprintf('\n-- %s loading data --\n', upper(data_name));
     X_train=[]; X_valid=[]; X_test=[]; Y_train=[]; Y_valid=[]; Y_test=[];
-    if fcheck([data_dir '/' data_name '.mat']), 
-        load([data_dir '/' data_name]); 
-    else
-        fprintf('\n');
-	    % Read the labels
-	    Y_train=read_labels([input_name '_train.labels']);
-	    Y_valid=read_labels([input_name '_valid.labels']);  
-	    Y_test=read_labels([input_name '_test.labels']);   
-	    % Read the data
-	    X_train=matrix_data_read([input_name '_train.data'],p.feat_num,p.train_num,p.data_type);
-	    X_valid=matrix_data_read([input_name '_valid.data'],p.feat_num,p.valid_num,p.data_type);
-        X_test=matrix_data_read([input_name '_test.data'],p.feat_num,p.test_num,p.data_type);
-        save([data_dir '/' data_name], 'X_train', 'X_valid', 'X_test', 'Y_train', 'Y_valid', 'Y_test');
-    end
+   	load([data_dir '/' data_name]); 
     fprintf('\n-- %s data loaded --\n', upper(data_name));
-	% Check the labels
-	check_labels(Y_train, p.train_num, p.train_pos_num);
-    if ~isempty(Y_valid), check_labels(Y_valid, p.valid_num, p.valid_pos_num); end
-    if ~isempty(Y_test), check_labels(Y_test, p.test_num, p.test_pos_num); end
-	% Check the data
-	check_data(X_train, p.train_num, p.feat_num, p.train_check_sum);
-	check_data(X_valid, p.valid_num, p.feat_num, p.valid_check_sum);
-	check_data(X_test, p.test_num, p.feat_num, p.test_check_sum);
-	fprintf('\n-- %s data sanity checked --\n', upper(data_name));
-    % Try some method
-    fprintf('\n-- %s testing with %s method --\n\n', upper(data_name), method);
-    tic;
-
-	item = 1;
-	AUC_select_num = 1;
-	ERR_select_num = 1;
-	maxAUC = 0;
-	minERR = 1;
-	for select_num=1:200
-		% Select some features
-		idx_feat = feat_select(X_train, Y_train, select_num);
-		% Train some classifier using the selected features
-		[c, idx_feat] = train(X_train, Y_train, idx_feat);
-		% Test the classifier
-    	[Y_resu_train, Y_conf_train] = predict(X_train, c, idx_feat, X_train, Y_train);
-    	[Y_resu_valid, Y_conf_valid] = predict( X_valid, c, idx_feat, X_train, Y_train);
-    	[Y_resu_test, Y_conf_test] = predict( X_test, c, idx_feat, X_train, Y_train);
-		errate_train=balanced_errate(Y_resu_train, Y_train);
-    	errate_valid=balanced_errate(Y_resu_valid, Y_valid);
-    	errate_test=balanced_errate(Y_resu_test, Y_test); 
-    	auc_train=auc(Y_resu_train.*Y_conf_train, Y_train);
-    	auc_valid=auc(Y_resu_valid.*Y_conf_valid, Y_valid);
-    	auc_test=auc(Y_resu_test.*Y_conf_test, Y_test);
-		t=toc;
-		fprintf('Number of features: %d\n', length(idx_feat));
-		fprintf('Training set: errate= %5.2f%%, auc= %5.2f%%\n', errate_train*100, auc_train*100);
-    	if ~isempty(Y_valid), 
-    	    fprintf('Validation set: errate= %5.2f%%, auc= %5.2f%%\n', errate_valid*100, auc_valid*100);
-    	end
-    	if ~isempty(Y_test), 
-    	    fprintf('Test set: errate= %5.2f%%, auc= %5.2f%%\n', errate_test*100, auc_test*100);
-		end
-		fprintf('Time of selection, training, and testing: %5.2f seconds\n', t);
-		
-
-		feat(item) = select_num;
-		errTrain(item) = errate_train;
-		errValid(item) = errate_valid;
-		aucTrain(item) = auc_train;
-		aucValid(item) = auc_valid;
-		item = item + 1;
-		
-		if(errate_valid < minERR)
-			minERR = errate_valid;
-			ERR_select_num = select_num;
-		end
+    
+	% Try some method
+    fprintf('\n-- Begining... --\n\n');
 	
-		
-		if(auc_valid > maxAUC)
-			maxAUC = auc_valid;
-			AUC_select_num = select_num;
-		end
-	end
-	
-	figure(1)
-	subplot(1,2,1)
-	plot(feat,errValid,feat,errTrain)
-	grid on;
-	subplot(1,2,2)
-	plot(feat,aucValid,feat,aucTrain)	
-	grid on;
 
-	fprintf('\nOptimised\n\n')
-	select_num =  (ERR_select_num + AUC_select_num)./2;
 
+	%%%%%%%%%%%%%
+	%	Begin   %
+	%%%%%%%%%%%%%
+
+	select_num = 200%size(X_train,2);
+	disp(select_num)
 	% Select some features
-	idx_feat = feval([method '_feat_select'], X_train, Y_train, select_num);
+	idx_feat = feat_select( X_train, Y_train, select_num);
+
 	% Train some classifier using the selected features
-	[c, idx_feat] = feval([method '_train'], X_train, Y_train, idx_feat);
-	% Test the classifier
-    [Y_resu_train, Y_conf_train] = feval([method '_predict'], X_train, c, idx_feat, X_train, Y_train);
-    [Y_resu_valid, Y_conf_valid] = feval([method '_predict'], X_valid, c, idx_feat, X_train, Y_train);
-    [Y_resu_test, Y_conf_test] = feval([method '_predict'], X_test, c, idx_feat, X_train, Y_train);
-	errate_train=balanced_errate(Y_resu_train, Y_train);
-    errate_valid=balanced_errate(Y_resu_valid, Y_valid);
-    errate_test=balanced_errate(Y_resu_test, Y_test); 
-    auc_train=auc(Y_resu_train.*Y_conf_train, Y_train);
-    auc_valid=auc(Y_resu_valid.*Y_conf_valid, Y_valid);
-    auc_test=auc(Y_resu_test.*Y_conf_test, Y_test);
-	t=toc;
+	[c, idx_feat] = train( X_train, Y_train, X_valid, Y_valid, idx_feat);
+	
+
+
+	%%%%%%%%%%%%
+	%	End	   %
+	%%%%%%%%%%%%
+
+
+
+
+	% Classifier has been trained, prediction only
+	[Y_resu_train, Y_conf_train] 	= predict( X_train, c, idx_feat, X_train, Y_train);
+    [Y_resu_valid, Y_conf_valid] 	= predict( X_valid, c, idx_feat, X_train, Y_train);
+    [Y_resu_test, Y_conf_test] 		= predict( X_test, c, idx_feat, X_train, Y_train);
+
+	% Blance error for train and validiate
+	errate_train					= balanced_errate(Y_resu_train, Y_train);
+    errate_valid					= balanced_errate(Y_resu_valid, Y_valid);
+	
+	% AUC error for train and validiate
+	auc_train						= auc(Y_resu_train.*Y_conf_train, Y_train);
+    auc_valid						= auc(Y_resu_valid.*Y_conf_valid, Y_valid);
+
+	% User output
 	fprintf('Number of features: %d\n', length(idx_feat));
 	fprintf('Training set: errate= %5.2f%%, auc= %5.2f%%\n', errate_train*100, auc_train*100);
-    if ~isempty(Y_valid), 
-        fprintf('Validation set: errate= %5.2f%%, auc= %5.2f%%\n', errate_valid*100, auc_valid*100);
-    end
-    if ~isempty(Y_test), 
-        fprintf('Test set: errate= %5.2f%%, auc= %5.2f%%\n', errate_test*100, auc_test*100);
-	end
-	fprintf('Time of selection, training, and testing: %5.2f seconds\n', t);
+    fprintf('Validation set: errate= %5.2f%%, auc= %5.2f%%\n', errate_valid*100, auc_valid*100);
 
 	% Write out the results 
 	% --- Note: the class predictions (.resu files) are mandatory.
