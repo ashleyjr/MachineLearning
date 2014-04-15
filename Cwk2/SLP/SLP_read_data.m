@@ -21,11 +21,11 @@
 
 % Set parameters and directories (%%% CHANGE THAT %%%)
 %select_num=40;                  % Number of features to select.
-
+clear
 dataset={'arcene', 'dexter', 'dorothea', 'gisette', 'madelon'};
 dataset={'dexter'};
 method='SLP';                % Your method name.
-where_my_data_is='..\';            % This is the path to your data and results are
+where_my_data_is='../';            % This is the path to your data and results are
                                 % e.g. c:/users/data/nips/ or /usr/home/iguyon/ 
                                 % (do not forget the last slash)
 
@@ -41,7 +41,7 @@ for k=1:length(dataset)
 	data_name=dataset{k};
     input_dir=[data_dir '/' upper(data_name)];
 	input_name=[input_dir '/' data_name]
-	output_name=[output_dir '/' data_name];
+	output_name=[output_dir '/' data_name]
 	fprintf('\n/|\\-/|\\-/|\\-/|\\ Loading and checking dataset %s /|\\-/|\\-/|\\-/|\\\n\n', upper(data_name));
 	% Data parameters and statistics
 	p=read_parameters([input_name '.param'])
@@ -83,62 +83,62 @@ for k=1:length(dataset)
 	ERR_select_num = 1;
 	maxAUC = 0;
 	minERR = 1;
-	for select_num=1:100
-		% Select some features
-		idx_feat = feval([method '_feat_select'], X_train, Y_train, select_num);
-		% Train some classifier using the selected features
-		[c, idx_feat] = feval([method '_train'], X_train, Y_train, idx_feat);
-		% Test the classifier
-    	[Y_resu_train, Y_conf_train] = feval([method '_predict'], X_train, c, idx_feat, X_train, Y_train);
-    	[Y_resu_valid, Y_conf_valid] = feval([method '_predict'], X_valid, c, idx_feat, X_train, Y_train);
-    	[Y_resu_test, Y_conf_test] = feval([method '_predict'], X_test, c, idx_feat, X_train, Y_train);
-		errate_train=balanced_errate(Y_resu_train, Y_train);
-    	errate_valid=balanced_errate(Y_resu_valid, Y_valid);
-    	errate_test=balanced_errate(Y_resu_test, Y_test); 
-    	auc_train=auc(Y_resu_train.*Y_conf_train, Y_train);
-    	auc_valid=auc(Y_resu_valid.*Y_conf_valid, Y_valid);
-    	auc_test=auc(Y_resu_test.*Y_conf_test, Y_test);
-		t=toc;
-		fprintf('Number of features: %d\n', length(idx_feat));
-		fprintf('Training set: errate= %5.2f%%, auc= %5.2f%%\n', errate_train*100, auc_train*100);
-    	if ~isempty(Y_valid), 
-    	    fprintf('Validation set: errate= %5.2f%%, auc= %5.2f%%\n', errate_valid*100, auc_valid*100);
-    	end
-    	if ~isempty(Y_test), 
-    	    fprintf('Test set: errate= %5.2f%%, auc= %5.2f%%\n', errate_test*100, auc_test*100);
-		end
-		fprintf('Time of selection, training, and testing: %5.2f seconds\n', t);
-		
+	%for select_num=1:100
+	%	% Select some features
+	%	idx_feat = feval([method '_feat_select'], X_train, Y_train, select_num);
+	%	% Train some classifier using the selected features
+	%	[c, idx_feat] = feval([method '_train'], X_train, Y_train, idx_feat);
+	%	% Test the classifier
+    %	[Y_resu_train, Y_conf_train] = feval([method '_predict'], X_train, c, idx_feat, X_train, Y_train);
+    %	[Y_resu_valid, Y_conf_valid] = feval([method '_predict'], X_valid, c, idx_feat, X_train, Y_train);
+    %	[Y_resu_test, Y_conf_test] = feval([method '_predict'], X_test, c, idx_feat, X_train, Y_train);
+	%	errate_train=balanced_errate(Y_resu_train, Y_train);
+    %	errate_valid=balanced_errate(Y_resu_valid, Y_valid);
+    %	errate_test=balanced_errate(Y_resu_test, Y_test); 
+    %	auc_train=auc(Y_resu_train.*Y_conf_train, Y_train);
+    %	auc_valid=auc(Y_resu_valid.*Y_conf_valid, Y_valid);
+    %	auc_test=auc(Y_resu_test.*Y_conf_test, Y_test);
+	%	t=toc;
+	%	fprintf('Number of features: %d\n', length(idx_feat));
+	%	fprintf('Training set: errate= %5.2f%%, auc= %5.2f%%\n', errate_train*100, auc_train*100);
+    %	if ~isempty(Y_valid), 
+    %	    fprintf('Validation set: errate= %5.2f%%, auc= %5.2f%%\n', errate_valid*100, auc_valid*100);
+    %	end
+    %	if ~isempty(Y_test), 
+    %	    fprintf('Test set: errate= %5.2f%%, auc= %5.2f%%\n', errate_test*100, auc_test*100);
+	%	end
+	%	fprintf('Time of selection, training, and testing: %5.2f seconds\n', t);
+	%	
 
-		feat(item) = select_num;
-		errTrain(item) = errate_train;
-		errValid(item) = errate_valid;
-		aucTrain(item) = auc_train;
-		aucValid(item) = auc_valid;
-		item = item + 1;
-		
-		if(errate_valid < minERR)
-			minERR = errate_valid;
-			ERR_select_num = select_num;
-		end
-	
-		
-		if(auc_valid > maxAUC)
-			maxAUC = auc_valid;
-			AUC_select_num = select_num;
-		end
-	end
-	
-	figure(1)
-	subplot(1,2,1)
-	plot(feat,errValid,feat,errTrain)
-	grid on;
-	subplot(1,2,2)
-	plot(feat,aucValid,feat,aucTrain)	
-	grid on;
+	%	feat(item) = select_num;
+	%	errTrain(item) = errate_train;
+	%	errValid(item) = errate_valid;
+	%	aucTrain(item) = auc_train;
+	%	aucValid(item) = auc_valid;
+	%	item = item + 1;
+	%	
+	%	if(errate_valid < minERR)
+	%		minERR = errate_valid;
+	%		ERR_select_num = select_num;
+	%	end
+	%
+	%	
+	%	if(auc_valid > maxAUC)
+	%		maxAUC = auc_valid;
+	%		AUC_select_num = select_num;
+	%	end
+	%end
+	%
+	%figure(1)
+	%subplot(1,2,1)
+	%plot(feat,errValid,feat,errTrain)
+	%grid on;
+	%subplot(1,2,2)
+	%plot(feat,aucValid,feat,aucTrain)	
+	%grid on;
 
 	fprintf('\nOptimised\n\n')
-	select_num = 100%(ERR_select_num + AUC_select_num)./2;
+	select_num = 7;% (ERR_select_num + AUC_select_num)./2;
 
 	% Select some features
 	idx_feat = feval([method '_feat_select'], X_train, Y_train, select_num);
