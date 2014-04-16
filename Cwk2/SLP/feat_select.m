@@ -1,4 +1,4 @@
-function idx=SLP_feat_select(X, Y, num)	
-	fval=Y'*X;
-	[sval, si]=sort(-fval);
-	idx=si(1:num);
+function idx=feat_select(X)
+	for i=1:size(X,2)	
+		idx(i) = i;
+	end
