@@ -62,9 +62,9 @@ Everything implemented has been developed from scratch for the MATLAB programmin
 	\label{eqn:theta}
 \end{equation}
 
-\section{Approach}
+\section{Machine Learning Architecure}
 
-\subsection{Single Layer Perceptron}
+\subsection{Perceptron}
 
 
 The first attempt at classification was using a simple a preceptron architecture; shown in figure~\ref{fig:slp}.
@@ -77,7 +77,7 @@ In practice the offset parameter, $b$, is added to the weight vector and every i
 \begin{figure}[ht]
    \centering
     \includegraphics[height = 4cm]{SLP.pdf}
-   \caption{Single Layer Perceptron (SLP) architecture.}
+   \caption{Perceptron architecture.}
    \label{fig:slp}
 \end{figure}
 
@@ -91,6 +91,53 @@ In practice the offset parameter, $b$, is added to the weight vector and every i
 	\label{eqn:slp_error}
 \end{equation}
 
+\begin{equation}
+   \textbf{Y} = \Theta ( \textbf{X}.\textbf{W} + \textbf{b})
+   \label{eqn:slp_mat}
+\end{equation}
+
+\begin{equation}	
+	\textbf{W}_{t+1} = \textbf{W}_t + \Delta \textbf{W}
+	\label{eqn:slp_learn_1}
+\end{equation}
+
+\begin{equation}	
+	\mathbf{E} = (\mathbf{T} - \mathbf{Y})^{T}
+	\label{eqn:slp_learn_2}
+\end{equation}
+
+\begin{equation}	
+	\Delta \mathbf{W} = \mathbf{\eta}*\mathbf{E}\mathbf{X}^T
+	\label{eqn:slp_learn_3}
+\end{equation}
+
+
+\subsection{Multi Layer Perceptron}
+
+
+The first attempt at classification was using a simple a preceptron architecture; shown in figure~\ref{fig:slp}.
+Capable of producing a linear separation boundary subject to equation~\eqref{eqn:slp} the method serves as starting point for further investigation into the data.
+The error discrete error from from the training patterns is calculated using equation~\eqref{eqn:slp_error}.
+Equation~\eqref{eqn:slp_mat} expands the method by considering many different training patterns applied to only one set of weights.
+The weight vector is trained using the iterative learning rule held in equations~\eqref{eqn:slp_learn_1},~\eqref{eqn:slp_learn_2} and~\eqref{eqn:slp_learn_3}~\citep{info05mackay}.
+In practice the offset parameter, $b$, is added to the weight vector and every input pattern is appended with a constant unit feature to allow complete training.
+
+\begin{figure}[ht]
+   \centering
+    \includegraphics[height = 4cm]{MLP.pdf}
+   \caption{Multi Layer Perceptron (MLP) architecture.}
+   \label{fig:slp}
+\end{figure}
+
+\begin{equation}
+   y = \Theta \left(b + \sum_{i=1}^{n} w_i x_i \right)
+   \label{eqn:slp}
+\end{equation}
+
+\begin{equation}	
+	e = t - y,\:\:e \in \{-2,0.+2\}
+	\label{eqn:slp_error}
+\end{equation}
 
 \begin{equation}
    \textbf{Y} = \Theta ( \textbf{X}.\textbf{W} + \textbf{b})
@@ -114,7 +161,9 @@ In practice the offset parameter, $b$, is added to the weight vector and every i
 
 
 
+\section{Feature Selection}
 
+\section{Results}
 
 \section{Conclusions}
 
