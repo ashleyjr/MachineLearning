@@ -1,22 +1,22 @@
-function [param, idx_out]=SLP_train(X_train, Y_train, idx_in)
-	eta=0.001
-	X=X_train(:,idx_in);			% Subset of features
+function [param,feat_out]=train(X_train, Y_train, X_valid, Y_valid, feat_in)
+	eta=1;
+	X=X_train(:,feat_in);						% Subset of features
 	patterns=size(X,1);
-	ones_row=ones(patterns,1);
-	X=horzcat(X,ones_row);			% Offset on all input patterns
 	features=size(X,2);
-	W=zeros(features,1);			% Init weights 	
-	minErrate=1;
-	for t=1:100
-		Y=unitVec(X*W)';						% perceptron
-		errate(t) = balanced_errate(Y, Y_train);	
-		deltaW = eta*((Y_train - Y)'*X)';
-		W = W + deltaW;
+	w_in=zeros(features,features);		% Weights from input to each hidden layer node
+	w_out=zeros(features,1);			% Weights from hidden layer to output 
+
+	for i=1:features
+		w_out(i) = rand();
+		for j=1:features
+			w_in(i,) = rand()-0.5;
+		end
 	end
 
-	figure(2)
-	plot(errate)
-	minErrate
-	param.W = W(1:(end-1));
-	param.b = W(end);
-	idx_out=idx_in;
+
+	w_in
+	w_out
+
+	param.w_in = w_in;
+	param.w_out = w_out;
+	feat_out = feat_in;
