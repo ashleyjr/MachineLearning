@@ -3,7 +3,7 @@ addpath('../Common')
 dataset={'arcene', 'dexter', 'dorothea', 'gisette', 'madelon'};
 dataset={'dexter'};
 %dataset={'dexter', 'dorothea','gisette'};
-method=('SLP')
+method=('MLP')
 where_my_data_is='../';            						% This is the path to your data and results are
 data_dir=[where_my_data_is 'Data'] 						% Wehre you put the five data directories dowloaded.
 output_dir=[where_my_data_is 'Results/' method] 		% The outputs of a given method.
@@ -34,13 +34,16 @@ for k=1:length(dataset)
     
 	% Try some method
     fprintf('\n-- Begining... --\n\n');
-	idx = feat_select(X_train);
-	[c,idx_feat] = train( X_train, Y_train, X_valid, Y_valid,idx);
-	
+	idx = feat_select(X_train,Y_train,50);
+
+	[params,idx_feat] = train( X_train, Y_train, X_valid, Y_valid, idx);
+
+
 	% Classifier has been trained, prediction only
-	[Y_resu_train, Y_conf_train] 	= predict( X_train, c,	idx_feat	);
-    [Y_resu_valid, Y_conf_valid] 	= predict( X_valid, c,	idx_feat	);
-    [Y_resu_test, Y_conf_test] 		= predict( X_test, 	c,	idx_feat	);
+	[Y_resu_train, Y_conf_train] 	= predict( X_train, params,	idx	);
+    [Y_resu_valid, Y_conf_valid] 	= predict( X_valid, params,	idx	);
+    %[Y_resu_test, Y_conf_test] 		= predict( X_test, 	params,	idx_feat	);
+
 
 	% Blance error for train and validiate
 	errate_train					= balanced_errate(Y_resu_train, Y_train);
@@ -55,32 +58,6 @@ for k=1:length(dataset)
     fprintf('Validation set: errate= %5.2f%%, auc= %5.2f%%\n', errate_valid*100, auc_valid*100);
 
 
-
-	X_all=horzcat(X_train',X_valid')';
-	Y_all=horzcat(Y_train',Y_valid')';
-
-	idx = feat_select(X_all);	
-	[c,idx_feat] = train( X_all, Y_all, X_valid, Y_valid,idx);
-	
-
-	% Classifier has been trained, prediction only
-	[Y_resu_train, Y_conf_train] 	= predict( X_train, c,	idx_feat	);
-    [Y_resu_valid, Y_conf_valid] 	= predict( X_valid, c,	idx_feat	);
-    [Y_resu_test, Y_conf_test] 		= predict( X_test, 	c,	idx_feat	);
-
-	% Blance error for train and validiate
-	errate_train					= balanced_errate(Y_resu_train, Y_train);
-    errate_valid					= balanced_errate(Y_resu_valid, Y_valid);
-	
-	% AUC error for train and validiate
-	auc_train						= auc(Y_resu_train.*Y_conf_train, Y_train);
-    auc_valid						= auc(Y_resu_valid.*Y_conf_valid, Y_valid);
-
-
-
-	% User output	
-	fprintf('Training set: errate= %5.2f%%, auc= %5.2f%%\n', errate_train*100, auc_train*100);
-    fprintf('Validation set: errate= %5.2f%%, auc= %5.2f%%\n', errate_valid*100, auc_valid*100);
 
 	% Write out the results 
 	% --- Note: the class predictions (.resu files) are mandatory.
@@ -88,14 +65,14 @@ for k=1:length(dataset)
 	% --- allow us to compute ROC curves. A confidence values can be the absolute
 	% --- values of a discriminant value, it does not need to be normalized
 	% --- to resemble a probability.
-	save_outputs([output_name '_train.resu'], Y_resu_train);
-	save_outputs([output_name '_valid.resu'], Y_resu_valid);
-	save_outputs([output_name '_test.resu'], Y_resu_test);
-    save_outputs([output_name '_train.conf'], Y_conf_train);
-	save_outputs([output_name '_valid.conf'], Y_conf_valid);
-	save_outputs([output_name '_test.conf'], Y_conf_test);
-	save_outputs([output_name '.feat'], idx_feat);
-	fprintf('\n-- %s results saved, see %s* --\n', upper(data_name), output_name);
+	%save_outputs([output_name '_train.resu'], Y_resu_train);
+	%save_outputs([output_name '_valid.resu'], Y_resu_valid);
+	%save_outputs([output_name '_test.resu'], Y_resu_test);
+    %save_outputs([output_name '_train.conf'], Y_conf_train);
+	%save_outputs([output_name '_valid.conf'], Y_conf_valid);
+	%save_outputs([output_name '_test.conf'], Y_conf_test);
+	%save_outputs([output_name '.feat'], idx_feat);
+	%fprintf('\n-- %s results saved, see %s* --\n', upper(data_name), output_name);
 
 end % Loop over datasets
 
