@@ -34,7 +34,7 @@ for k=1:length(dataset)
     
 	% Try some method
     fprintf('\n-- Begining... --\n\n');
-	idx = feat_select(X_train,Y_train,15);
+	idx = feat_select(X_train,Y_train,30);
 
 	[params,idx_feat] = train( X_train, Y_train, X_valid, Y_valid, idx);
 
