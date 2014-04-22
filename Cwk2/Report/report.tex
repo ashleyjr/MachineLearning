@@ -62,21 +62,30 @@ Everything implemented has been developed from scratch for the MATLAB programmin
 	\label{eqn:theta}
 \end{equation}
 
-\section{Machine Learning Architecure}
+\section{Classifier Architectures}
+
+Artificial Neural Networks (ANNs) have been chosen as the classifier architectures.
+ANNs are efficient learning machines with biological inspiration~\citep{bishop06pattern}. 
+They are parametric models which can be adapted during supervised training and are scalable in complexity.
+The error space can be considered as a function of parameters and the training data, $E(w|D)$, therefore many different optimisation algorithms can be used can used to train the model. 
+
+
 
 \subsection{Perceptron}
+\label{sec:perceptron}
 
-
-The first attempt at classification was using a simple a preceptron architecture; shown in figure~\ref{fig:slp}.
+Figure~\ref{fig:slp} holds the most simple manifestation of an ANN called a perceptron.
+Each feature of an input pattern is weighted and then summed, along with a bias term, to produce an output.
+This output passes through a step activation function for binary classification.
 Capable of producing a linear separation boundary subject to equation~\eqref{eqn:slp} the method serves as starting point for further investigation into the data.
-The error discrete error from from the training patterns is calculated using equation~\eqref{eqn:slp_error}.
+The discrete error from from the training patterns is calculated using equation~\eqref{eqn:slp_error}.
 Equation~\eqref{eqn:slp_mat} expands the method by considering many different training patterns applied to only one set of weights.
 The weight vector is trained using the iterative learning rule held in equations~\eqref{eqn:slp_learn_1},~\eqref{eqn:slp_learn_2} and~\eqref{eqn:slp_learn_3}~\citep{info05mackay}.
 In practice the offset parameter, $b$, is added to the weight vector and every input pattern is appended with a constant unit feature to allow complete training.
 
 \begin{figure}[ht]
    \centering
-    \includegraphics[height = 4cm]{SLP.pdf}
+    \includegraphics[width = 8cm]{SLP.pdf}
    \caption{Perceptron architecture.}
    \label{fig:slp}
 \end{figure}
@@ -113,20 +122,16 @@ In practice the offset parameter, $b$, is added to the weight vector and every i
 
 
 \subsection{Multi Layer Perceptron}
+Section~\ref{sec:perceptron} can be expanded by concatenating the architecture to produce a multi layer perceptron.
+They contain hidden layers and when used with non-linear activation functions can produced a non-linear separation boundary~\citep{bennett01ml}.
+Only one hidden layer is implemented for simplicity as shown in Figure~\ref{fig:mlp}. 
 
-
-The first attempt at classification was using a simple a preceptron architecture; shown in figure~\ref{fig:slp}.
-Capable of producing a linear separation boundary subject to equation~\eqref{eqn:slp} the method serves as starting point for further investigation into the data.
-The error discrete error from from the training patterns is calculated using equation~\eqref{eqn:slp_error}.
-Equation~\eqref{eqn:slp_mat} expands the method by considering many different training patterns applied to only one set of weights.
-The weight vector is trained using the iterative learning rule held in equations~\eqref{eqn:slp_learn_1},~\eqref{eqn:slp_learn_2} and~\eqref{eqn:slp_learn_3}~\citep{info05mackay}.
-In practice the offset parameter, $b$, is added to the weight vector and every input pattern is appended with a constant unit feature to allow complete training.
 
 \begin{figure}[ht]
    \centering
-    \includegraphics[height = 4cm]{MLP.pdf}
-   \caption{Multi Layer Perceptron (MLP) architecture.}
-   \label{fig:slp}
+    \includegraphics[width = 8cm]{MLP.pdf}
+   \caption{Multi layer perceptron architecture.}
+   \label{fig:mlp}
 \end{figure}
 
 \begin{equation}

@@ -1,40 +1,46 @@
 function [param,feat_out]=train(X_train, Y_train, X_valid, Y_valid, feat_in)
-	eta=1;
+	eta=5e-8;
 	X=X_train(:,feat_in);						% Subset of features
 	patterns=size(X,1);
 	features=size(X,2);
 	ones_row=ones(patterns,1);
 	X=horzcat(X,ones_row);					% Offset on all input patterns
-	w_in=ones(features,features+1)-0.5;		% Weights from input to each hidden layer node
+	w_in=rand(features+1,features+1)-0.5;		% Weights from input to each hidden layer node
 	w_out=rand(1,features+1,1)-0.5;			% Weights from hidden layer to output 
+	param.b_out = 0;
+	param.b_in = 0;
 
 
-	rec = 1
-	for i=1:100	
+	for i=1:10000
 		disp(i)
 
-		param.w_out = w_out(1:(end-1));
-		param.b_out = w_out(end);
-		param.w_in = w_in(:,1:(end-1));
-		param.b_in = mean(w_in(:,end));
-		
-		[resu, conf] = predict(X_train,param,feat_in);
+		for j=1:patterns
+			Y(j) = w_out*(tanh(w_in*X(j,:)'));
+		end
+		Y = unitVec(Y);
+		err(i)=balanced_errate(Y', Y_train);
 
-		deltaW = eta*((Y_train - resu)'*X);
-		w_out = w_out - deltaW;
-
-		err(rec)=balanced_errate(resu, Y_train);
-		rec = rec + 1;
-
-		%for j=1:features
-		%	[resu, conf] = predict(X_train,param,feat_in);	
-		%	deltaW = eta*((Y_train - resu)'*X);
-		%	w_in(j,:) = w_in(j,:) - deltaW;
-		%	err(rec)=balanced_errate(resu, Y_train);
-		%	rec = rec + 1;
-		%end
+		deltaW = eta*((Y_train - Y')'*X);	
+		w_out_new = w_out + deltaW;
+		for i=1:features
+			deltaW = eta*w_out(i)*((Y_train - Y')'*X);
+			w_in(i,:) = w_in(i,:) + deltaW;
+		end
+		w_out = w_out_new;
+	
 	end
+	for j=1:patterns
+		Y(j) = w_out*(tanh(w_in*X(j,:)'));
+	end
+	Y = unitVec(Y);
+	err(i)=balanced_errate(Y', Y_train);
 
+	w_out
+	w_in
+	param.w_out = w_out(1,1:(end-1));
+	param.b_out = w_out(end);
+	param.w_in = w_in(1:(end-1),1:(end-1));
+	param.b_in = w_in(end,1:(end-1))';
 	figure;
 	plot(err)
 	
