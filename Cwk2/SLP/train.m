@@ -13,8 +13,10 @@ function [param,idx_feat]=train(X_train, Y_train, X_valid, Y_valid, feat)
 		Y=unitVec(X*W)';	
 		
 		
-		deltaW = eta*((Y_train - Y)'*X)';
-		W = W + deltaW;
+		deltaW = (Y_train - Y)';
+		W = W + eta*(deltaW*X)';
+
+
 
 		param.W = W(1:(end-1));
 		param.b = W(end);
