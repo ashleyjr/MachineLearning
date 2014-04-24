@@ -1,8 +1,8 @@
 clear
 addpath('../Common')
 dataset={'arcene', 'dexter', 'dorothea', 'gisette', 'madelon'};
-dataset={'dexter'};
-%dataset={'dexter', 'dorothea','gisette'};
+
+dataset={'arcene', 'dexter', 'dorothea', 'madelon'};
 method=('MLP')
 where_my_data_is='../';            						% This is the path to your data and results are
 data_dir=[where_my_data_is 'Data'] 						% Wehre you put the five data directories dowloaded.

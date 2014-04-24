@@ -1,6 +1,6 @@
 function [Y_resu, Y_conf] = predict(X_test, param, feat)	
 	X=X_test(:,feat);
-	hiddens=size(param.w_in,1)
+	hiddens=size(param.w_in,1);
 
 	for j=1:hiddens
 		Y_hidden(j,:) = tanh(X*param.w_in(j,:)'+param.b_in(j));
