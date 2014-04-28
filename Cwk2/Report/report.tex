@@ -10,6 +10,10 @@
 \usepackage[nodayofweek]{datetime}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{fontenc}
+\usepackage{multirow}
+\usepackage{amsmath}
+
 
 \usepackage{graphicx}
 
@@ -165,6 +169,36 @@ Only one hidden layer is implemented for simplicity as shown in Figure~\ref{fig:
 \end{equation}
 
 
+\subsection{Testing}
+
+
+
+The classifier was tested upon the the \emph{Dexter} dataset using all of the features avaialble in the input patterns.
+The training iterations are shown in shonw in figure~\ref{fig:mlp_train} and can be matched to the results held in table~\ref{tab:mlp_dexter}.
+Manual tuning was used set the number of hidden nodes to $\mathrm{100}$ and $\mathrm{\eta}$ to a value of $\mathrm{5 \times 10^{-5}}$.
+This performs as expted upon the test data which is only slighly worse than the validation set performance.
+
+\begin{figure}[ht]
+   \centering
+    \includegraphics[width = 10cm]{MLP_Train.pdf}
+   \caption{Training iterations of the MLP.}
+   \label{fig:mlp_train}
+\end{figure}
+
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|l|l|} \hline
+     			& Train & Valid & Test \\ \hline
+		BER & 0.0033 & 0.0833 & 0.0890 \\ \hline
+		AUC & 1.0000 & 0.9761 & 0.9739 \\ \hline
+	\end{tabular}
+	\caption{MLP results on Dexter. Submission ID 5459~\ref{sec:id}.}
+	\label{tab:mlp_dexter}
+\end{table}
+
+
+
 
 \section{Feature Selection}
 
@@ -185,6 +219,12 @@ Only one hidden layer is implemented for simplicity as shown in Figure~\ref{fig:
 \begin{appendix}
 
 \newpage
+
+\section{Submission ID URLs}
+\label{sec:id}
+\begin{itemize}
+	\item 5459: \href{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5459}{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5459}
+\end{itemize}
 \section{Code Listings}
 
 \end{appendix}

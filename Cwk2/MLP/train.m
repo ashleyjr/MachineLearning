@@ -1,19 +1,22 @@
 function [best,feat_out]=train(X_train, Y_train, X_valid, Y_valid, feat_in)
-	eta=1e-4;
+	eta=5e-5;
 	X=X_train(:,feat_in);						% Subset of features
 	X_val=X_valid(:,feat_in);
 	patterns=size(X,1);
 	ones_row=ones(patterns,1);
 	X=horzcat(X,ones_row);					% Offset on all input patternus
 	features=size(X,2);
-	hiddens=features*2;
+	hiddens=100;
+
+	best_low = 1;
+	for test=1:10
 	w_in=rand(hiddens,features)-0.5;		% Weights from input to each hidden layer node
-	w_out=rand(1,hiddens);			% Weights from hidden layer to output 
+	w_out=rand(1,hiddens)-0.5;			% Weights from hidden layer to output 
 	b_out = 0;
 
 
-	low_valid = 1;	
-	for i=1:200
+	low_valid = 1;
+	for i=1:15
 		disp(i)
 
 
@@ -65,10 +68,20 @@ function [best,feat_out]=train(X_train, Y_train, X_valid, Y_valid, feat_in)
 	figure;
 	subplot(1,2,1);
 	plot(x,err_train,x,err_valid);
+	xlabel('Iterations')
+	ylabel('BER')
 	grid on;
 	subplot(1,2,2);
 	plot(x,auc_train,x,auc_valid);
+	xlabel('Iterations')
+	ylabel('AUC')
 	grid on;
 	low_valid
+	if(low_valid < best_low)
+		best_low = low_valid;
+		best_param = best;
+	end
+	end
 
+	best = best_param;
 	feat_out = feat_in;

@@ -1,7 +1,7 @@
 clear
 addpath('../Common')
 dataset={'arcene', 'dexter', 'dorothea', 'gisette', 'madelon'};
-dataset={'dexter'};
+dataset={'arcene'};
 %dataset={'dexter', 'dorothea','gisette'};
 method=('SLP')
 where_my_data_is='../';            						% This is the path to your data and results are
@@ -39,64 +39,78 @@ for k=1:length(dataset)
 	 
 
 
-
+	min_err_valid = 1;
+	last_err_train = 1;
 	features = size(X_train,2);	
-	for i=1:features
-		full(i) = i;
-	end
-
-	errMin = 1;
-	rec = 1;
-	using = 1;
-	for i=1:10000
+	take = ones(1,features);
+	ban = zeros(1,features);
+	for i=1:1000
 		disp(i)
 
-		
-		% ADD
-		test = using;
-		pick = ceil(rand()*size(full,2));
-		test(rec) = full(pick);	
-		c = train( X_train, Y_train, test,20);
-		[Y_resu_train, Y_conf_train] = predict( X_train, c,	test	);
-		err	= balanced_errate(Y_resu_train, Y_train);
-		if(err < errMin)
-			errMin = err;
-			using(rec) = full(pick);
-			full(pick) = [];
-			rec = rec + 1;
+		% Mutate something not on the ban list
+		pick = ceil(rand()*features);
+		while(ban(pick) == 1)
+			pick = ceil(rand()*features);
 		end
-
-
-		% REMOVE
-		if(size(test,2) > 2)
-			test = using;
-			pick = ceil(rand()*size(test,2));
-			test(pick) = [];
-			c = train( X_train, Y_train, test,20);
-			[Y_resu_train, Y_conf_train] = predict( X_train, c,	test	);
-			err	= balanced_errate(Y_resu_train, Y_train);
-			if(err < errMin)
-				errMin = err;
-				using(pick) = [];
-				rec = rec - 1;
+		take(pick) = 1 - take(pick);
+		rec = 1;
+		using = [];
+		for j=1:features
+			if((take(j) == 1) && (ban(j) == 0))
+				using(rec) = j;
+				rec = rec + 1;
 			end
 		end
 		
 		c = train( X_train, Y_train, using,20);
 		[Y_resu_train, Y_conf_train] = predict( X_train, c,	using	);
-		err	= balanced_errate(Y_resu_train, Y_train);
-		errPlot(i) = err;	
+		err_train(i)	= balanced_errate(Y_resu_train, Y_train);
+		%[Y_resu_valid, Y_conf_valid] = predict( X_valid, c,	using	);
+		%err_valid(i)	= balanced_errate(Y_resu_valid, Y_valid);
 		feats(i) = size(using,2);
+		sum_ban(i) = sum(ban);
+		
+		if(last_err_train < err_train(i))
+			err_train(i) = last_err_train;
+			if(take(pick) == 1)
+				ban(pick) = 1;		% never consider again
+			else
+				take(pick) = 1;		% put back in
+			end
+		end
+
+		%if(err_valid(i) < min_err_valid)
+		%	min_err_valid = err_valid;
+		%	best = using;	
+		%end
+
+		last_err_train = err_train(i);
+		x(i) = i;
 	end
 	figure;
-	plot(errPlot)
-	figure;
+	subplot(1,3,1);
+	plot(x,err_train)%,x,err_valid)
+	grid on;
+	subplot(1,3,2);
 	plot(feats);
+	grid on;
+	subplot(1,3,3)
+	plot(sum_ban);
+	grid on;
 
-	c = train( X_train, Y_train, using,1000);
-	[Y_resu_test, Y_conf_test] 	= predict( X_valid, c,	using);
-	
-	[Y_resu_valid, Y_conf_valid] 	= predict( X_valid, c,	using	);
+
+	rec = 1;
+	best = [];
+	for j=1:features
+		if((take(j) == 1) && (ban(j) == 0))
+			best(rec) = j;
+			rec = rec + 1;
+		end
+	end
+
+	c = train_graph( X_train, Y_train, X_valid,Y_valid,best, 20);
+	[Y_resu_test, Y_conf_test] 		= predict( X_valid, c, best);
+	[Y_resu_valid, Y_conf_valid] 	= predict( X_valid, c, best);
 	errate_valid					= balanced_errate(Y_resu_valid, Y_valid)
 	auc_valid						= auc(Y_resu_valid.*Y_conf_valid, Y_valid);
 

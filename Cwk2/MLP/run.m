@@ -3,6 +3,7 @@ addpath('../Common')
 dataset={'arcene', 'dexter', 'dorothea', 'gisette', 'madelon'};
 
 dataset={'arcene', 'dexter', 'dorothea', 'madelon'};
+dataset={'dexter'};
 method=('MLP')
 where_my_data_is='../';            						% This is the path to your data and results are
 data_dir=[where_my_data_is 'Data'] 						% Wehre you put the five data directories dowloaded.
@@ -42,7 +43,7 @@ for k=1:length(dataset)
 	% Classifier has been trained, prediction only
 	[Y_resu_train, Y_conf_train] 	= predict( X_train, params,	idx	);
     [Y_resu_valid, Y_conf_valid] 	= predict( X_valid, params,	idx	);
-    %[Y_resu_test, Y_conf_test] 		= predict( X_test, 	params,	idx_feat	);
+    [Y_resu_test, Y_conf_test] 		= predict( X_test, 	params,	idx_feat	);
 
 
 	% Blance error for train and validiate
@@ -65,14 +66,14 @@ for k=1:length(dataset)
 	% --- allow us to compute ROC curves. A confidence values can be the absolute
 	% --- values of a discriminant value, it does not need to be normalized
 	% --- to resemble a probability.
-	%save_outputs([output_name '_train.resu'], Y_resu_train);
-	%save_outputs([output_name '_valid.resu'], Y_resu_valid);
-	%save_outputs([output_name '_test.resu'], Y_resu_test);
-    %save_outputs([output_name '_train.conf'], Y_conf_train);
-	%save_outputs([output_name '_valid.conf'], Y_conf_valid);
-	%save_outputs([output_name '_test.conf'], Y_conf_test);
-	%save_outputs([output_name '.feat'], idx_feat);
-	%fprintf('\n-- %s results saved, see %s* --\n', upper(data_name), output_name);
+	save_outputs([output_name '_train.resu'], Y_resu_train);
+	save_outputs([output_name '_valid.resu'], Y_resu_valid);
+	save_outputs([output_name '_test.resu'], Y_resu_test);
+    save_outputs([output_name '_train.conf'], Y_conf_train);
+	save_outputs([output_name '_valid.conf'], Y_conf_valid);
+	save_outputs([output_name '_test.conf'], Y_conf_test);
+	save_outputs([output_name '.feat'], idx_feat);
+	fprintf('\n-- %s results saved, see %s* --\n', upper(data_name), output_name);
 
 end % Loop over datasets
 
