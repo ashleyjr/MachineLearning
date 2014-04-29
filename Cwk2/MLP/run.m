@@ -1,8 +1,5 @@
 clear
 addpath('../Common')
-dataset={'arcene', 'dexter', 'dorothea', 'gisette', 'madelon'};
-
-dataset={'arcene', 'dexter', 'dorothea', 'madelon'};
 dataset={'dexter'};
 method=('MLP')
 where_my_data_is='../';            						% This is the path to your data and results are

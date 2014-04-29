@@ -1,0 +1,402 @@
+<html>
+<head>
+<meta http-equiv='content-type' content='text/html; charset=utf8'>
+<style>
+<!--
+body {width:auto;padding:5;margin:5;}
+.error {font-weight:bold;color:#f00;font-style:italic;}
+.word1,.word2,.word3 {color: #009; border-left: 1px solid #CDF; border-bottom: 1px solid #CDF;}
+.word2 {font-weight: 700;}
+.word3 {font-style: italic;}
+.command {color: #c00;}
+.exclcommand {color: #f99;}
+.option {color: #cc0;}
+.grouping, .document {color: #900; font-weight:bold;}
+.mathgroup {color: #090;}
+.exclmath {color: #6c6;}
+.ignore {color: #999;}
+.exclgroup {color:#c66;}
+.tc {color: #999; font-weight:bold;}
+.comment {color: #999; font-style: italic;}
+.state {color: #990; font-size: 70%;}
+.cumsum {color: #999; font-size: 80%;}
+.fileinclude {color: #696; font-weight:bold;}
+.warning {color: #c00; font-weight: 700;}
+
+div.filegroup, div.parse, div.stylehelp, div.count, div.sumcount, div.error {
+   border: solid 1px #999; margin: 4pt 0pt; padding: 4pt;
+}
+div.stylehelp {font-size: 80%; background: #fffff0; margin-bottom: 16pt;}
+div.filegroup {background: #dfd; margin-bottom: 16pt;}
+div.count {background: #ffe;}
+div.sumcount {background: #cec;}
+div.error {background: #fcc;}
+.parse {font-size: 80%; background: #f8fff8; border-bottom:none;}
+
+ul.count {list-style-type: none; margin: 4pt 0pt; padding: 0pt;}
+.count li.header {font-weight: bold; font-style: italic;}
+.subcount li.header {font-weight: normal; font-style: italic;}
+.subcount li {margin-left: 16pt; font-size: 80%;}
+.fielddesc {font-style: italic;}
+.nb {color: #900;}
+
+table.stat {border:2px solid #339; background:#666; border-collapse:collapse;}
+table.stat tr {border:1px solid #CCC;}
+table.stat th, table.stat td {padding:1pt 4pt;}
+table.stat col {padding:4pt;}
+table.stat thead {background: #CCF;}
+table.stat tbody {border:1px solid #333;}
+table.stat tbody.sumstat {background:#FFC;}
+table.stat tbody.langstat {background:#FEE;}
+table.stat tbody.wordstat {background:#EEF;}
+table.stat .sum {font-weight:bold; font-style:italic;}
+-->
+</style>
+</head>
+
+<body>
+
+<h1>LaTeX word count</h1>
+<div class='stylehelp'><p><h2>Format/colour codes of verbose output:</h2>
+
+<span class='word1'>Text which is counted</span>&nbsp;&nbsp;....&nbsp;&nbsp;counted as text words<br>
+<span class='word2'>Header and title text</span>&nbsp;&nbsp;....&nbsp;&nbsp;counted as header words<br>
+<span class='word3'>Caption text and footnotes</span>&nbsp;&nbsp;....&nbsp;&nbsp;counted as caption words<br>
+<span class='ignore'>Ignored text or code</span>&nbsp;&nbsp;....&nbsp;&nbsp;excluded or ignored<br>
+<span class='document'>\documentclass</span>&nbsp;&nbsp;....&nbsp;&nbsp;document start, beginning of preamble<br>
+<span class='command'>\macro</span>&nbsp;&nbsp;....&nbsp;&nbsp;macro not counted, but parameters may be<br>
+<span class='exclcommand'>\macro</span>&nbsp;&nbsp;....&nbsp;&nbsp;macro in excluded region<br>
+<span class='option'>[Macro options]</span>&nbsp;&nbsp;....&nbsp;&nbsp;not counted<br>
+<span class='grouping'>\begin{group}&nbsp; \end{group}</span>&nbsp;&nbsp;....&nbsp;&nbsp;begin/end group<br>
+<span class='exclgroup'>\begin{group}&nbsp; \end{group}</span>&nbsp;&nbsp;....&nbsp;&nbsp;begin/end group in excluded region<br>
+<span class='mathgroup'>$&nbsp; $</span>&nbsp;&nbsp;....&nbsp;&nbsp;counted as one equation<br>
+<span class='exclmath'>$&nbsp; $</span>&nbsp;&nbsp;....&nbsp;&nbsp;equation in excluded region<br>
+<span class='comment'>% Comments</span>&nbsp;&nbsp;....&nbsp;&nbsp;not counted<br>
+<span class='tc'>%TC:TeXcount instructions</span>&nbsp;&nbsp;....&nbsp;&nbsp;not counted<br>
+<span class='fileinclude'>File to include</span>&nbsp;&nbsp;....&nbsp;&nbsp;not counted but file may be counted later<br>
+<span class='error'>ERROR</span>&nbsp;&nbsp;....&nbsp;&nbsp;TeXcount error message<br>
+</p></div>
+
+
+<div class='filegroup'>
+<h2>File: report.tex</h2>
+<div class='parse'><p>
+<span class='comment'>%% ----------------------------------------------------------------</span><br>
+<span class='comment'>%% Article.tex</span><br>
+<span class='comment'>%% ---------------------------------------------------------------- </span><br>
+<span class='document'>\documentclass</span><span class='ignore'>{ecsarticle}</span>     <span class='comment'>% Use the Article Style</span><br>
+<span class='exclcommand'>\graphicspath</span><span class='ignore'>{</span><span class='ignore'>{</span><span class='ignore'>Figures</span><span class='ignore'>/</span><span class='ignore'>}</span><span class='ignore'>}</span>&nbsp;  <span class='comment'>% Location of your graphics files</span><br>
+<span class='document'>\usepackage</span><span class='document'>{natbib}</span>            <span class='comment'>% Use Natbib style for the refs.</span><br>
+<span class='exclcommand'>\hypersetup</span><span class='ignore'>{</span><span class='ignore'>colorlinks</span><span class='ignore'>=</span><span class='ignore'>false</span><span class='ignore'>}</span>&nbsp;  <span class='comment'>% Set to false for black/white printing</span><br>
+<span class='exclcommand'>\input</span><span class='ignore'>{Definitions}</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='comment'>% Include your abbreviations</span><br>
+<br>
+<span class='document'>\usepackage</span><span class='option'>[nodayofweek]</span><span class='document'>{datetime}</span><br>
+<span class='document'>\usepackage</span><span class='document'>{listings}</span><br>
+<span class='document'>\usepackage</span><span class='document'>{color}</span><br>
+<span class='document'>\usepackage</span><span class='document'>{fontenc}</span><br>
+<span class='document'>\usepackage</span><span class='document'>{multirow}</span><br>
+<span class='document'>\usepackage</span><span class='document'>{amsmath}</span><br>
+<br>
+<br>
+<span class='document'>\usepackage</span><span class='document'>{graphicx}</span><br>
+<br>
+<br>
+<br>
+<span class='comment'>%% ----------------------------------------------------------------</span><br>
+<span class='grouping'>\begin</span><span class='grouping'>{document}</span><br>
+<span class='tc'>%TC:ignore</span><br>
+<span class='ignore'>\frontmatter</span><br>
+<span class='ignore'>\title</span><span class='ignore'>&nbsp; &nbsp; &nbsp; </span><span class='ignore'>{</span><span class='ignore'>COMP6036</span><span class='ignore'>:</span><span class='ignore'> </span><span class='ignore'>Advanced</span><span class='ignore'> </span><span class='ignore'>Machine</span><span class='ignore'> </span><span class='ignore'>Learning</span><span class='ignore'>\\</span><br>
+<span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class='ignore'>Feature</span><span class='ignore'> </span><span class='ignore'>Selection</span><span class='ignore'> </span><span class='ignore'>Challenge</span><span class='ignore'>}</span><br>
+<span class='ignore'>&nbsp; &nbsp; &nbsp; </span><br>
+<span class='ignore'>\addresses</span><span class='ignore'>&nbsp; </span><span class='ignore'>{</span><span class='ignore'>\deptname</span><span class='ignore'>\\</span><span class='ignore'>\univname</span><span class='ignore'>}</span><br>
+<span class='ignore'>\authors</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  </span><span class='ignore'>{</span><span class='ignore'>\href</span><span class='ignore'>{</span><span class='ignore'>mailto</span><span class='ignore'>:</span><span class='ignore'>ajr2g10</span><span class='ignore'>@</span><span class='ignore'>ecs.soton.ac.uk</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='ignore'>Ashley</span><span class='ignore'> </span><span class='ignore'>J</span><span class='ignore'>.</span><span class='ignore'> </span><span class='ignore'>Robinson</span><span class='ignore'>}</span><span class='ignore'>\\</span><span class='ignore'>\href</span><span class='ignore'>{</span><span class='ignore'>mailto</span><span class='ignore'>:</span><span class='ignore'>ajr2g10</span><span class='ignore'>@</span><span class='ignore'>ecs.soton.ac.uk</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='ignore'>ajr2g10</span><span class='ignore'>@</span><span class='ignore'>ecs.soton.ac.uk</span><span class='ignore'>}</span><span class='ignore'>}</span><br>
+<br>
+<span class='ignore'>\date</span><span class='ignore'>&nbsp; &nbsp; &nbsp;  </span><span class='ignore'>{</span><span class='ignore'>\today</span><span class='ignore'>}</span><br>
+<span class='ignore'>\subject</span><span class='ignore'>&nbsp; &nbsp; </span><span class='ignore'>{</span><span class='ignore'>}</span><br>
+<span class='ignore'>\keywords</span><span class='ignore'>&nbsp;  </span><span class='ignore'>{</span><span class='ignore'>}</span><br>
+<span class='ignore'>\maketitle</span><br>
+<span class='comment'>%% ----------------------------------------------------------------</span><br>
+<br>
+<br>
+<span class='ignore'>\begin</span><span class='ignore'>{abstract}</span><br>
+<span class='ignore'>All</span><span class='ignore'> </span><span class='ignore'>algorithms</span><span class='ignore'> </span><span class='ignore'>implemented</span><span class='ignore'> </span><span class='ignore'>in</span><span class='ignore'> </span><span class='ignore'>this</span><span class='ignore'> </span><span class='ignore'>report</span><span class='ignore'> </span><span class='ignore'>is</span><span class='ignore'> </span><span class='ignore'>written</span><span class='ignore'> </span><span class='ignore'>by</span><span class='ignore'> </span><span class='ignore'>the</span><span class='ignore'> </span><span class='ignore'>author</span><span class='ignore'> </span><span class='ignore'>for</span><span class='ignore'> </span><span class='ignore'>the</span><span class='ignore'> </span><span class='ignore'>MATLA</span><span class='ignore'> </span><span class='ignore'>programming</span><span class='ignore'> </span><span class='ignore'>language</span><span class='ignore'>.</span><br>
+<span class='ignore'>Initial</span><span class='ignore'> </span><span class='ignore'>testing</span><span class='ignore'> </span><span class='ignore'>with</span><span class='ignore'> </span><span class='ignore'>a</span><span class='ignore'> </span><span class='ignore'>linear</span><span class='ignore'> </span><span class='ignore'>perceptron</span><span class='ignore'> </span><span class='ignore'>using</span><span class='ignore'> </span><span class='ignore'>all</span><span class='ignore'> </span><span class='ignore'>features</span><span class='ignore'> </span><span class='ignore'>in</span><span class='ignore'> </span><span class='ignore'>the</span><span class='ignore'> </span><span class='ignore'>input</span><span class='ignore'> </span><span class='ignore'>space</span><span class='ignore'> </span><span class='ignore'>yields</span><span class='ignore'> </span><span class='ignore'>good</span><span class='ignore'> </span><span class='ignore'>results</span><span class='ignore'> </span><span class='ignore'>on</span><span class='ignore'> </span><span class='ignore'>the</span><span class='ignore'> </span><span class='ignore'>dexter</span><span class='ignore'> </span><span class='ignore'>and</span><span class='ignore'> </span><span class='ignore'>gisette</span><span class='ignore'> </span><span class='ignore'>datasets</span><span class='ignore'>.</span><br>
+<span class='ignore'>The</span><span class='ignore'> </span><span class='ignore'>objective</span><span class='ignore'> </span><span class='ignore'>is</span><span class='ignore'> </span><span class='ignore'>to</span><span class='ignore'> </span><span class='ignore'>further</span><span class='ignore'> </span><span class='ignore'>optimise</span><span class='ignore'> </span><span class='ignore'>the</span><span class='ignore'> </span><span class='ignore'>performance</span><span class='ignore'> </span><span class='ignore'>on</span><span class='ignore'> </span><span class='ignore'>these</span><span class='ignore'> </span><span class='ignore'>datasets</span><span class='ignore'>.</span><span class='ignore'> </span><br>
+<span class='ignore'>\end</span><span class='ignore'>{abstract}</span><br>
+<br>
+<span class='tc'>%TC:endignore</span><br>
+<span class='command'>\mainmatter</span><br>
+<br>
+<br>
+<span class='command'>\section</span><span class='word2'>{Introduction}</span><br>
+<br>
+<span class='word1'>Each</span> <span class='word1'>dataset</span> <span class='word1'>has</span> <span class='word1'>been</span> <span class='word1'>divided</span> <span class='word1'>in</span> <span class='word1'>three</span> <span class='word1'>section</span> <span class='word1'>for</span> <span class='word1'>training</span><span class='ignore'>,</span> <span class='word1'>validation</span> <span class='word1'>and</span> <span class='word1'>test</span> <span class='word1'>submission</span><span class='ignore'>.</span><br>
+<span class='word1'>The</span> <span class='word1'>final</span> <span class='word1'>partition</span> <span class='word1'>labels</span> <span class='word1'>remain</span> <span class='word1'>hidden</span> <span class='word1'>from</span> <span class='word1'>the</span> <span class='word1'>development</span> <span class='word1'>process</span><span class='ignore'>.</span><br>
+<span class='word1'>The</span> <span class='word1'>discrete</span> <span class='word1'>class</span> <span class='word1'>labels</span><span class='ignore'>,</span> <span class='mathgroup'>$</span><span class='ignore'>t</span><span class='mathgroup'>$</span><span class='ignore'>,</span> <span class='word1'>and</span> <span class='word1'>the</span> <span class='word1'>classifier</span> <span class='word1'>outputs</span><span class='ignore'>,</span> <span class='mathgroup'>$</span><span class='ignore'>y</span><span class='mathgroup'>$</span><span class='ignore'>,</span> <span class='word1'>are</span> <span class='word1'>described</span> <span class='word1'>by</span> <span class='word1'>equation</span><span class='ignore'>~</span><span class='command'>\eqref</span><span class='ignore'>{</span><span class='ignore'>eqn</span><span class='ignore'>:</span><span class='ignore'>output</span><span class='ignore'>}</span><span class='ignore'>.</span><br>
+<span class='word1'>Keeping</span> <span class='word1'>to</span> <span class='word1'>these</span> <span class='word1'>output</span> <span class='word1'>values</span> <span class='word1'>requires</span> <span class='word1'>using</span> <span class='word1'>the</span> <span class='word1'>thresholding</span> <span class='word1'>function</span> <span class='mathgroup'>$</span><span class='ignore'>\Theta</span><span class='mathgroup'>$</span> <span class='word1'>in</span> <span class='word1'>equation</span><span class='ignore'>~</span><span class='command'>\eqref</span><span class='ignore'>{</span><span class='ignore'>eqn</span><span class='ignore'>:</span><span class='ignore'>theta</span><span class='ignore'>}</span><span class='ignore'>.</span> <br>
+<span class='word1'>Everything</span> <span class='word1'>implemented</span> <span class='word1'>has</span> <span class='word1'>been</span> <span class='word1'>developed</span> <span class='word1'>from</span> <span class='word1'>scratch</span> <span class='word1'>for</span> <span class='word1'>the</span> <span class='word1'>MATLAB</span> <span class='word1'>programming</span> <span class='word1'>language</span><span class='ignore'>.</span> <br>
+<br>
+<br>
+<span class='grouping'>\begin</span><span class='grouping'>{equation}</span><br>
+	<span class='ignore'>y</span><span class='ignore'>,</span><span class='ignore'>t</span> <span class='exclcommand'>\in</span> <span class='ignore'>\{</span><span class='ignore'>-</span><span class='ignore'>1</span><span class='ignore'>,</span><span class='ignore'>+</span><span class='ignore'>1</span><span class='ignore'>\}</span><br>
+	<span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>eqn</span><span class='ignore'>:</span><span class='ignore'>output</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{equation}</span><br>
+<br>
+<span class='grouping'>\begin</span><span class='grouping'>{equation}</span><br>
+	<span class='ignore'>\Theta</span><span class='ignore'>(</span><span class='ignore'>a</span><span class='ignore'>)</span> <span class='ignore'>=</span> <span class='exclcommand'>\left</span><span class='ignore'>\{</span> <br>
+&nbsp; &nbsp; &nbsp; <span class='exclgroup'>\begin</span><span class='exclgroup'>{array}</span><span class='ignore'>{l}</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp;  <span class='ignore'>+</span><span class='ignore'>1</span><span class='ignore'>,</span><span class='exclcommand'>\:</span><span class='ignore'>a</span> <span class='ignore'>&gt;</span> <span class='ignore'>0</span><span class='exclcommand'>\\</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp;  <span class='ignore'>-</span><span class='ignore'>1</span><span class='ignore'>,</span><span class='exclcommand'>\:</span><span class='ignore'>a</span> <span class='exclcommand'>\leq</span> <span class='ignore'>0</span><span class='exclcommand'>\\</span><br>
+&nbsp; &nbsp; &nbsp; <span class='exclgroup'>\end</span><span class='exclgroup'>{array}</span><span class='exclcommand'>\right</span><span class='ignore'>.</span>	<br>
+	<span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>eqn</span><span class='ignore'>:</span><span class='ignore'>theta</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{equation}</span><br>
+<br>
+<span class='command'>\section</span><span class='ignore'>{</span><span class='word2'>Classifier</span> <span class='word2'>Build</span> <span class='word2'>and</span> <span class='word2'>Test</span><span class='ignore'>}</span><br>
+<br>
+<span class='word1'>Artificial</span> <span class='word1'>Neural</span> <span class='word1'>Networks</span> <span class='ignore'>(</span><span class='word1'>ANNs</span><span class='ignore'>)</span> <span class='word1'>have</span> <span class='word1'>been</span> <span class='word1'>chosen</span> <span class='word1'>as</span> <span class='word1'>the</span> <span class='word1'>classifier</span> <span class='word1'>architectures</span><span class='ignore'>.</span><br>
+<span class='word1'>ANNs</span> <span class='word1'>are</span> <span class='word1'>efficient</span> <span class='word1'>learning</span> <span class='word1'>machines</span> <span class='word1'>with</span> <span class='word1'>biological</span> <span class='word1'>inspiration</span><span class='ignore'>~</span><span class='command'>\citep</span><span class='ignore'>{bishop06pattern}</span><span class='ignore'>.</span> <br>
+<span class='word1'>They</span> <span class='word1'>are</span> <span class='word1'>parametric</span> <span class='word1'>models</span> <span class='word1'>which</span> <span class='word1'>can</span> <span class='word1'>be</span> <span class='word1'>adapted</span> <span class='word1'>during</span> <span class='word1'>supervised</span> <span class='word1'>training</span> <span class='word1'>and</span> <span class='word1'>are</span> <span class='word1'>scalable</span> <span class='word1'>in</span> <span class='word1'>complexity</span><span class='ignore'>.</span><br>
+<span class='word1'>The</span> <span class='word1'>error</span> <span class='word1'>space</span> <span class='word1'>can</span> <span class='word1'>be</span> <span class='word1'>considered</span> <span class='word1'>as</span> <span class='word1'>a</span> <span class='word1'>function</span> <span class='word1'>of</span> <span class='word1'>parameters</span> <span class='word1'>and</span> <span class='word1'>the</span> <span class='word1'>training</span> <span class='word1'>data</span><span class='ignore'>,</span> <span class='mathgroup'>$</span><span class='ignore'>E</span><span class='ignore'>(</span><span class='ignore'>w</span><span class='ignore'>|</span><span class='ignore'>D</span><span class='ignore'>)</span><span class='mathgroup'>$</span><span class='ignore'>,</span> <span class='word1'>therefore</span> <span class='word1'>many</span> <span class='word1'>different</span> <span class='word1'>optimisation</span> <span class='word1'>algorithms</span> <span class='word1'>can</span> <span class='word1'>be</span> <span class='word1'>used</span> <span class='word1'>can</span> <span class='word1'>used</span> <span class='word1'>to</span> <span class='word1'>train</span> <span class='word1'>the</span> <span class='word1'>model</span><span class='ignore'>.</span> <br>
+<br>
+<br>
+<br>
+<span class='command'>\subsection</span><span class='word2'>{Perceptron}</span><br>
+<span class='command'>\label</span><span class='ignore'>{</span><span class='ignore'>sec</span><span class='ignore'>:</span><span class='ignore'>perceptron</span><span class='ignore'>}</span><br>
+<br>
+<span class='word1'>Figure</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>}</span> <span class='word1'>holds</span> <span class='word1'>the</span> <span class='word1'>most</span> <span class='word1'>simple</span> <span class='word1'>manifestation</span> <span class='word1'>of</span> <span class='word1'>an</span> <span class='word1'>ANN</span> <span class='word1'>called</span> <span class='word1'>a</span> <span class='word1'>perceptron</span><span class='ignore'>.</span><br>
+<span class='word1'>Each</span> <span class='word1'>feature</span> <span class='word1'>of</span> <span class='word1'>an</span> <span class='word1'>input</span> <span class='word1'>pattern</span> <span class='word1'>is</span> <span class='word1'>weighted</span> <span class='word1'>and</span> <span class='word1'>then</span> <span class='word1'>summed</span><span class='ignore'>,</span> <span class='word1'>along</span> <span class='word1'>with</span> <span class='word1'>a</span> <span class='word1'>bias</span> <span class='word1'>term</span><span class='ignore'>,</span> <span class='word1'>to</span> <span class='word1'>produce</span> <span class='word1'>an</span> <span class='word1'>output</span><span class='ignore'>.</span><br>
+<span class='word1'>This</span> <span class='word1'>output</span> <span class='word1'>passes</span> <span class='word1'>through</span> <span class='word1'>a</span> <span class='word1'>step</span> <span class='word1'>activation</span> <span class='word1'>function</span> <span class='word1'>for</span> <span class='word1'>binary</span> <span class='word1'>classification</span><span class='ignore'>.</span><br>
+<span class='word1'>Capable</span> <span class='word1'>of</span> <span class='word1'>producing</span> <span class='word1'>a</span> <span class='word1'>linear</span> <span class='word1'>separation</span> <span class='word1'>boundary</span> <span class='word1'>the</span> <span class='word1'>method</span> <span class='word1'>serves</span> <span class='word1'>as</span> <span class='word1'>starting</span> <span class='word1'>point</span> <span class='word1'>for</span> <span class='word1'>further</span> <span class='word1'>investigation</span> <span class='word1'>into</span> <span class='word1'>the</span> <span class='word1'>data</span><span class='ignore'>.</span><br>
+<span class='word1'>The</span> <span class='word1'>architecture</span> <span class='word1'>is</span> <span class='word1'>vectorised</span> <span class='word1'>in</span> <span class='word1'>equation</span><span class='ignore'>.</span><span class='ignore'>~</span><span class='command'>\eqref</span><span class='ignore'>{</span><span class='ignore'>eqn</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>_</span><span class='ignore'>mat</span><span class='ignore'>}</span> <span class='word1'>to</span> <span class='word1'>classify</span> <span class='word1'>an</span> <span class='word1'>entire</span> <span class='word1'>dataset</span><span class='ignore'>.</span> <br>
+<span class='word1'>The</span> <span class='word1'>offset</span> <span class='word1'>parameter</span><span class='ignore'>,</span> <span class='mathgroup'>$</span><span class='ignore'>b</span><span class='mathgroup'>$</span><span class='ignore'>,</span> <span class='word1'>is</span> <span class='word1'>included</span> <span class='word1'>in</span> <span class='word1'>the</span> <span class='word1'>matrix</span> <span class='word1'>and</span> <span class='word1'>the</span> <span class='word1'>input</span> <span class='word1'>patterns</span> <span class='word1'>are</span> <span class='word1'>fixed</span> <span class='word1'>with</span> <span class='word1'>the</span> <span class='word1'>unit</span> <span class='word1'>feature</span> <span class='word1'>to</span> <span class='word1'>assist</span> <span class='word1'>with</span> <span class='word1'>training</span> <span class='word1'>the</span> <span class='word1'>classifier</span><span class='ignore'>.</span> <br>
+<br>
+<span class='word1'>Batch</span> <span class='word1'>training</span> <span class='word1'>is</span> <span class='word1'>done</span> <span class='word1'>iteratively</span> <span class='word1'>using</span> <span class='word1'>equation</span><span class='ignore'>~</span><span class='command'>\eqref</span><span class='ignore'>{</span><span class='ignore'>eqn</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>_</span><span class='ignore'>learn</span><span class='ignore'>}</span> <span class='word1'>where</span> <span class='word1'>the</span> <span class='word1'>error</span> <span class='word1'>between</span> <span class='word1'>the</span> <span class='word1'>output</span> <span class='word1'>and</span> <span class='word1'>labels</span> <span class='word1'>is</span> <span class='word1'>propagates</span> <span class='word1'>back</span> <span class='word1'>to</span> <span class='word1'>the</span> <span class='word1'>weights</span> <span class='word1'>using</span> <span class='word1'>the</span> <span class='word1'>transpose</span> <span class='word1'>of</span> <span class='word1'>the</span> <span class='word1'>input</span> <span class='word1'>patterns</span><span class='ignore'>.</span><br>
+<span class='word1'>A</span> <span class='word1'>training</span> <span class='word1'>parameter</span><span class='ignore'>,</span> <span class='mathgroup'>$</span><span class='ignore'>\eta</span><span class='mathgroup'>$</span><span class='ignore'>,</span> <span class='word1'>hes</span> <span class='word1'>been</span> <span class='word1'>manually</span> <span class='word1'>tuned</span> <span class='word1'>to</span> <span class='mathgroup'>$</span><span class='ignore'>10</span><span class='ignore'>^</span><span class='ignore'>{</span><span class='ignore'>-</span><span class='ignore'>4</span><span class='ignore'>}</span><span class='mathgroup'>$</span><span class='ignore'>.</span><br>
+<span class='word1'>Figure</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>_</span><span class='ignore'>train</span><span class='ignore'>}</span> <span class='word1'>shows</span> <span class='word1'>the</span> <span class='word1'>performance</span> <span class='word1'>on</span> <span class='word1'>the</span> <span class='word1'>dexter</span> <span class='word1'>dataset</span> <span class='word1'>over</span> <span class='word1'>the</span> <span class='word1'>training</span> <span class='word1'>process</span><span class='ignore'>.</span><br>
+<span class='word1'>Tested</span> <span class='word1'>upon</span> <span class='word1'>the</span> <span class='word1'>available</span> <span class='word1'>datasets</span> <span class='word1'>the</span> <span class='word1'>only</span> <span class='word1'>two</span> <span class='word1'>reasonable</span> <span class='word1'>performances</span> <span class='word1'>were</span> <span class='word1'>on</span> <span class='word1'>dexter</span> <span class='word1'>and</span> <span class='word1'>gisette</span> <span class='word1'>which</span> <span class='word1'>is</span> <span class='word1'>shown</span> <span class='word1'>in</span> <span class='word1'>tables</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>tab</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>_</span><span class='ignore'>dexter</span><span class='ignore'>}</span> <span class='word1'>and</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>tab</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>_</span><span class='ignore'>gisette</span><span class='ignore'>}</span> <span class='word1'>respectively</span><span class='ignore'>.</span><br>
+<span class='word1'>All</span> <span class='word1'>code</span> <span class='word1'>for</span> <span class='word1'>the</span> <span class='word1'>perceptron</span> <span class='word1'>is</span> <span class='word1'>held</span> <span class='word1'>in</span> <span class='word1'>appendix</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>sec</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>_</span><span class='ignore'>appendix</span><span class='ignore'>}</span><br>
+<br>
+<span class='grouping'>\begin</span><span class='grouping'>{figure}</span><span class='ignore'>[</span><span class='ignore'>ht</span><span class='ignore'>]</span><br>
+&nbsp;  <span class='exclcommand'>\centering</span><br>
+&nbsp;&nbsp;<span class='exclcommand'>\includegraphics</span><span class='option'>[width = 6cm]</span><span class='ignore'>{</span><span class='ignore'>SLP.pdf</span><span class='ignore'>}</span><br>
+&nbsp;  <span class='command'>\caption</span><span class='ignore'>{</span><span class='word3'>Perceptron</span> <span class='word3'>architecture</span><span class='ignore'>.</span><span class='ignore'>}</span><br>
+&nbsp; <span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{figure}</span><br>
+<br>
+<span class='grouping'>\begin</span><span class='grouping'>{equation}</span><br>
+&nbsp;  <span class='exclcommand'>\textbf</span><span class='ignore'>{Y}</span> <span class='ignore'>=</span> <span class='ignore'>\Theta </span><span class='ignore'>(</span> <span class='exclcommand'>\textbf</span><span class='ignore'>{X}</span><span class='ignore'>.</span><span class='exclcommand'>\textbf</span><span class='ignore'>{W}</span><span class='ignore'>)</span><br>
+&nbsp;  <span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>eqn</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>_</span><span class='ignore'>mat</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{equation}</span><br>
+<br>
+<span class='grouping'>\begin</span><span class='grouping'>{equation}</span><br>
+	<span class='exclcommand'>\textbf</span><span class='ignore'>{W}</span><span class='ignore'>_</span><span class='ignore'>{</span><span class='ignore'>t</span><span class='ignore'>+</span><span class='ignore'>1</span><span class='ignore'>}</span> <span class='ignore'>=</span> <span class='exclcommand'>\textbf</span><span class='ignore'>{W}</span><span class='ignore'>_</span><span class='ignore'>t</span> <span class='ignore'>+</span> <span class='exclcommand'>\mathbf</span><span class='ignore'>{\eta}</span><span class='ignore'>*</span><span class='ignore'>(</span><span class='exclcommand'>\mathbf</span><span class='ignore'>{Y}</span><span class='ignore'>-</span><span class='exclcommand'>\mathbf</span><span class='ignore'>{T}</span><span class='ignore'>)</span><span class='exclcommand'>\mathbf</span><span class='ignore'>{X}</span><span class='ignore'>^</span><span class='ignore'>T</span><br>
+	<span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>eqn</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>_</span><span class='ignore'>learn</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{equation}</span><br>
+<br>
+<br>
+<span class='grouping'>\begin</span><span class='grouping'>{figure}</span><span class='ignore'>[</span><span class='ignore'>ht</span><span class='ignore'>]</span><br>
+&nbsp;  <span class='exclcommand'>\centering</span><br>
+&nbsp;&nbsp;<span class='exclcommand'>\includegraphics</span><span class='option'>[width = 14cm]</span><span class='ignore'>{</span><span class='ignore'>SLP</span><span class='ignore'>_</span><span class='ignore'>train.pdf</span><span class='ignore'>}</span><br>
+&nbsp;  <span class='command'>\caption</span><span class='ignore'>{</span><span class='word3'>Perceptron</span> <span class='word3'>training</span> <span class='word3'>on</span> <span class='word3'>the</span> <span class='word3'>dexter</span> <span class='word3'>dataset</span><span class='ignore'>.</span><span class='ignore'>}</span><br>
+&nbsp; <span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>_</span><span class='ignore'>train</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{figure}</span><br>
+<br>
+<br>
+<span class='grouping'>\begin</span><span class='grouping'>{table}</span><span class='ignore'>[</span><span class='ignore'>h</span><span class='ignore'>]</span><br>
+	<span class='exclcommand'>\centering</span><br>
+	<span class='exclgroup'>\begin</span><span class='exclgroup'>{tabular}</span><span class='ignore'>{</span><span class='ignore'>|</span><span class='ignore'>l</span><span class='ignore'>|</span><span class='ignore'>l</span><span class='ignore'>|</span><span class='ignore'>l</span><span class='ignore'>|</span><span class='ignore'>l</span><span class='ignore'>|</span><span class='ignore'>}</span> <span class='exclcommand'>\hline</span><br>
+&nbsp;&nbsp; 			<span class='ignore'>&amp;</span> <span class='ignore'>Train</span> <span class='ignore'>&amp;</span> <span class='ignore'>Valid</span> <span class='ignore'>&amp;</span> <span class='ignore'>Test</span> <span class='exclcommand'>\\</span> <span class='exclcommand'>\hline</span><br>
+		<span class='ignore'>BER</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.0000</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.0633</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.0735</span> <span class='exclcommand'>\\</span> <span class='exclcommand'>\hline</span><br>
+		<span class='ignore'>AUC</span> <span class='ignore'>&amp;</span> <span class='ignore'>1.0000</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.9779</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.9767</span> <span class='exclcommand'>\\</span> <span class='exclcommand'>\hline</span><br>
+	<span class='exclgroup'>\end</span><span class='exclgroup'>{tabular}</span><br>
+	<span class='command'>\caption</span><span class='ignore'>{</span><span class='word3'>Perceptron</span> <span class='word3'>results</span> <span class='word3'>on</span> <span class='word3'>dexter</span><span class='ignore'>.</span> <span class='word3'>Submission</span> <span class='word3'>ID</span> <span class='word3'>5518</span> <span class='word3'>in</span> <span class='word3'>Appendix</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>sec</span><span class='ignore'>:</span><span class='ignore'>id</span><span class='ignore'>}</span><span class='ignore'>.</span><span class='ignore'>}</span><br>
+	<span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>tab</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>_</span><span class='ignore'>dexter</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{table}</span><br>
+<br>
+<span class='grouping'>\begin</span><span class='grouping'>{table}</span><span class='ignore'>[</span><span class='ignore'>h</span><span class='ignore'>]</span><br>
+	<span class='exclcommand'>\centering</span><br>
+	<span class='exclgroup'>\begin</span><span class='exclgroup'>{tabular}</span><span class='ignore'>{</span><span class='ignore'>|</span><span class='ignore'>l</span><span class='ignore'>|</span><span class='ignore'>l</span><span class='ignore'>|</span><span class='ignore'>l</span><span class='ignore'>|</span><span class='ignore'>l</span><span class='ignore'>|</span><span class='ignore'>}</span> <span class='exclcommand'>\hline</span><br>
+&nbsp;&nbsp; 			<span class='ignore'>&amp;</span> <span class='ignore'>Train</span> <span class='ignore'>&amp;</span> <span class='ignore'>Valid</span> <span class='ignore'>&amp;</span> <span class='ignore'>Test</span> <span class='exclcommand'>\\</span> <span class='exclcommand'>\hline</span><br>
+		<span class='ignore'>BER</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.0445</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.0430</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.0432</span> <span class='exclcommand'>\\</span> <span class='exclcommand'>\hline</span><br>
+		<span class='ignore'>AUC</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.9889</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.9894</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.9907</span> <span class='exclcommand'>\\</span> <span class='exclcommand'>\hline</span><br>
+	<span class='exclgroup'>\end</span><span class='exclgroup'>{tabular}</span><br>
+	<span class='command'>\caption</span><span class='ignore'>{</span><span class='word3'>Perceptron</span> <span class='word3'>results</span> <span class='word3'>on</span> <span class='word3'>gisette</span><span class='ignore'>.</span> <span class='word3'>Submission</span> <span class='word3'>ID</span> <span class='word3'>5518</span> <span class='word3'>in</span> <span class='word3'>Appendix</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>sec</span><span class='ignore'>:</span><span class='ignore'>id</span><span class='ignore'>}</span><span class='ignore'>.</span><span class='ignore'>}</span><br>
+	<span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>tab</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>_</span><span class='ignore'>gisette</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{table}</span><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<span class='command'>\subsection</span><span class='ignore'>{</span><span class='word2'>Multi</span> <span class='word2'>Layer</span> <span class='word2'>Perceptron</span> <span class='ignore'>(</span><span class='word2'>MLP</span><span class='ignore'>)</span><span class='ignore'>}</span><br>
+<span class='word1'>Section</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>sec</span><span class='ignore'>:</span><span class='ignore'>perceptron</span><span class='ignore'>}</span> <span class='word1'>can</span> <span class='word1'>be</span> <span class='word1'>expanded</span> <span class='word1'>by</span> <span class='word1'>concatenating</span> <span class='word1'>the</span> <span class='word1'>architecture</span> <span class='word1'>to</span> <span class='word1'>produce</span> <span class='word1'>a</span> <span class='word1'>multi</span> <span class='word1'>layer</span> <span class='word1'>perceptron</span><span class='ignore'>.</span><br>
+<span class='word1'>They</span> <span class='word1'>contain</span> <span class='word1'>hidden</span> <span class='word1'>layers</span> <span class='word1'>and</span> <span class='word1'>when</span> <span class='word1'>used</span> <span class='word1'>with</span> <span class='word1'>non-linear</span> <span class='word1'>activation</span> <span class='word1'>functions</span> <span class='word1'>can</span> <span class='word1'>produced</span> <span class='word1'>a</span> <span class='word1'>non-linear</span> <span class='word1'>separation</span> <span class='word1'>boundary</span><span class='ignore'>~</span><span class='command'>\citep</span><span class='ignore'>{bennett01ml}</span><span class='ignore'>.</span><br>
+<span class='word1'>Only</span> <span class='word1'>one</span> <span class='word1'>hidden</span> <span class='word1'>layer</span> <span class='word1'>is</span> <span class='word1'>implemented</span> <span class='word1'>for</span> <span class='word1'>simplicity</span> <span class='word1'>as</span> <span class='word1'>shown</span> <span class='word1'>in</span> <span class='word1'>figure</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>mlp</span><span class='ignore'>}</span><span class='ignore'>.</span><br>
+<span class='word1'>The</span> <span class='word1'>hidden</span> <span class='word1'>nodes</span> <span class='word1'>use</span> <span class='word1'>an</span> <span class='word1'>offset</span> <span class='mathgroup'>$</span><span class='ignore'>tanh</span><span class='mathgroup'>$</span> <span class='word1'>and</span> <span class='word1'>output</span> <span class='word1'>uses</span> <span class='word1'>the</span> <span class='mathgroup'>$</span><span class='ignore'>\Theta</span><span class='mathgroup'>$</span> <span class='word1'>function</span><span class='ignore'>.</span><br>
+<br>
+<br>
+<span class='word1'>When</span> <span class='word1'>testing</span> <span class='word1'>the</span> <span class='word1'>MLP</span> <span class='word1'>all</span> <span class='word1'>the</span> <span class='word1'>features</span> <span class='word1'>are</span> <span class='word1'>used</span> <span class='word1'>with</span> <span class='mathgroup'>$</span><span class='ignore'>50</span><span class='mathgroup'>$</span> <span class='word1'>hidden</span> <span class='word1'>nodes</span><span class='ignore'>.</span><br>
+<span class='word1'>Table</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>tab</span><span class='ignore'>:</span><span class='ignore'>mlp</span><span class='ignore'>_</span><span class='ignore'>dexter</span><span class='ignore'>}</span> <span class='word1'>is</span> <span class='word1'>trained</span> <span class='word1'>using</span> <span class='word1'>a</span> <span class='word1'>value</span> <span class='word1'>of</span> <span class='mathgroup'>$</span><span class='ignore'>\eta</span><span class='mathgroup'>$</span> <span class='word1'>set</span> <span class='word1'>to</span> <span class='mathgroup'>$</span><span class='ignore'>10</span><span class='ignore'>^</span><span class='ignore'>{</span><span class='ignore'>-</span><span class='ignore'>4</span><span class='ignore'>}</span><span class='mathgroup'>$</span> <span class='word1'>yet</span> <span class='word1'>shows</span> <span class='word1'>no</span> <span class='word1'>improvement</span><span class='ignore'>.</span><br>
+<span class='word1'>The</span> <span class='word1'>training</span> <span class='word1'>set</span> <span class='word1'>is</span> <span class='word1'>learnt</span> <span class='word1'>quickly</span> <span class='word1'>and</span> <span class='word1'>no</span> <span class='word1'>improvement</span> <span class='word1'>is</span> <span class='word1'>shown</span> <span class='word1'>in</span> <span class='word1'>the</span> <span class='word1'>validation</span> <span class='word1'>set</span><span class='ignore'>.</span><br>
+<span class='word1'>Table</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>tab</span><span class='ignore'>:</span><span class='ignore'>mlp</span><span class='ignore'>_</span><span class='ignore'>gisette</span><span class='ignore'>}</span> <span class='word1'>does</span> <span class='word1'>show</span> <span class='word1'>an</span> <span class='word1'>improvement</span> <span class='word1'>over</span> <span class='word1'>the</span> <span class='word1'>perceptron</span> <span class='word1'>with</span> <span class='mathgroup'>$</span><span class='ignore'>\eta</span><span class='mathgroup'>$</span> <span class='word1'>set</span> <span class='word1'>to</span> <span class='mathgroup'>$</span><span class='ignore'>10</span><span class='ignore'>^</span><span class='ignore'>{</span><span class='ignore'>-</span><span class='ignore'>5</span><span class='ignore'>}</span><span class='mathgroup'>$</span><span class='ignore'>.</span><br>
+<span class='word1'>The</span> <span class='word1'>taring</span> <span class='word1'>set</span> <span class='word1'>is</span> <span class='word1'>not</span> <span class='word1'>full</span> <span class='word1'>learnt</span> <span class='word1'>and</span> <span class='word1'>a</span> <span class='word1'>steady</span> <span class='word1'>increase</span> <span class='word1'>in</span> <span class='word1'>performance</span> <span class='word1'>is</span> <span class='word1'>shown</span> <span class='word1'>during</span> <span class='word1'>training</span> <span class='word1'>in</span> <span class='word1'>figure</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>mlp</span><span class='ignore'>_</span><span class='ignore'>train</span><span class='ignore'>}</span><span class='ignore'>.</span><br>
+<span class='word1'>Code</span> <span class='word1'>for</span> <span class='word1'>this</span> <span class='word1'>implementation</span> <span class='word1'>is</span> <span class='word1'>held</span> <span class='word1'>in</span> <span class='word1'>appendix</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>sec</span><span class='ignore'>:</span><span class='ignore'>mlp</span><span class='ignore'>_</span><span class='ignore'>appendix</span><span class='ignore'>}</span><br>
+<br>
+<br>
+<span class='grouping'>\begin</span><span class='grouping'>{figure}</span><span class='ignore'>[</span><span class='ignore'>ht</span><span class='ignore'>]</span><br>
+&nbsp;  <span class='exclcommand'>\centering</span><br>
+&nbsp;&nbsp;<span class='exclcommand'>\includegraphics</span><span class='option'>[width = 7cm]</span><span class='ignore'>{</span><span class='ignore'>MLP.pdf</span><span class='ignore'>}</span><br>
+&nbsp;  <span class='command'>\caption</span><span class='ignore'>{</span><span class='word3'>MLP</span> <span class='word3'>architecture</span><span class='ignore'>.</span><span class='ignore'>}</span><br>
+&nbsp; <span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>mlp</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{figure}</span><br>
+<br>
+<span class='grouping'>\begin</span><span class='grouping'>{equation}</span><br>
+&nbsp;  <span class='ignore'>y</span> <span class='ignore'>=</span> <span class='ignore'>\Theta </span><span class='exclcommand'>\left</span><span class='ignore'>(</span><span class='ignore'>b</span> <span class='ignore'>+</span> <span class='exclcommand'>\sum_</span><span class='ignore'>{</span><span class='ignore'>i</span><span class='ignore'>=</span><span class='ignore'>1</span><span class='ignore'>}</span><span class='ignore'>^</span><span class='ignore'>{m}</span> <span class='ignore'>u</span><span class='ignore'>_</span><span class='ignore'>i</span> <span class='exclcommand'>\tanh</span> <span class='exclcommand'>\left</span><span class='ignore'>(</span><span class='ignore'>c</span><span class='ignore'>_</span><span class='ignore'>i</span> <span class='ignore'>+</span> <span class='exclcommand'>\sum_</span><span class='ignore'>{</span><span class='ignore'>j</span><span class='ignore'>=</span><span class='ignore'>1</span><span class='ignore'>}</span><span class='ignore'>^</span><span class='ignore'>{n}</span> <span class='ignore'>x</span><span class='ignore'>_</span><span class='ignore'>j</span> <span class='ignore'>w</span><span class='ignore'>_</span><span class='ignore'>{</span><span class='ignore'>j</span><span class='ignore'>,</span><span class='ignore'>i</span><span class='ignore'>}</span><span class='exclcommand'>\right</span><span class='ignore'>)</span>&nbsp; <span class='exclcommand'>\right</span><span class='ignore'>)</span> <br>
+&nbsp;  <span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>eqn</span><span class='ignore'>:</span><span class='ignore'>mlp</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{equation}</span><br>
+<br>
+<span class='grouping'>\begin</span><span class='grouping'>{figure}</span><span class='ignore'>[</span><span class='ignore'>ht</span><span class='ignore'>]</span><br>
+&nbsp;  <span class='exclcommand'>\centering</span><br>
+&nbsp;&nbsp;<span class='exclcommand'>\includegraphics</span><span class='option'>[width = 14cm]</span><span class='ignore'>{</span><span class='ignore'>MLP</span><span class='ignore'>_</span><span class='ignore'>Train.pdf</span><span class='ignore'>}</span><br>
+&nbsp;  <span class='command'>\caption</span><span class='ignore'>{</span><span class='word3'>MLP</span> <span class='word3'>training</span> <span class='word3'>on</span> <span class='word3'>the</span> <span class='word3'>gisette</span> <span class='word3'>dataset</span><span class='ignore'>.</span><span class='ignore'>}</span><br>
+&nbsp; <span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>mlp</span><span class='ignore'>_</span><span class='ignore'>train</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{figure}</span><br>
+<br>
+<br>
+<span class='grouping'>\begin</span><span class='grouping'>{table}</span><span class='ignore'>[</span><span class='ignore'>h</span><span class='ignore'>]</span><br>
+	<span class='exclcommand'>\centering</span><br>
+	<span class='exclgroup'>\begin</span><span class='exclgroup'>{tabular}</span><span class='ignore'>{</span><span class='ignore'>|</span><span class='ignore'>l</span><span class='ignore'>|</span><span class='ignore'>l</span><span class='ignore'>|</span><span class='ignore'>l</span><span class='ignore'>|</span><span class='ignore'>l</span><span class='ignore'>|</span><span class='ignore'>}</span> <span class='exclcommand'>\hline</span><br>
+&nbsp;&nbsp; 			<span class='ignore'>&amp;</span> <span class='ignore'>Train</span> <span class='ignore'>&amp;</span> <span class='ignore'>Valid</span> <span class='ignore'>&amp;</span> <span class='ignore'>Test</span> <span class='exclcommand'>\\</span> <span class='exclcommand'>\hline</span><br>
+		<span class='ignore'>BER</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.0120</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.0280</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.0312</span> <span class='exclcommand'>\\</span> <span class='exclcommand'>\hline</span><br>
+		<span class='ignore'>AUC</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.9955</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.9864</span> <span class='ignore'>&amp;</span> <span class='ignore'>0.9839</span> <span class='exclcommand'>\\</span> <span class='exclcommand'>\hline</span><br>
+	<span class='exclgroup'>\end</span><span class='exclgroup'>{tabular}</span><br>
+	<span class='command'>\caption</span><span class='ignore'>{</span><span class='word3'>MLP</span> <span class='word3'>results</span> <span class='word3'>on</span> <span class='word3'>gisette</span><span class='ignore'>.</span> <span class='word3'>Submission</span> <span class='word3'>ID</span> <span class='word3'>5549</span> <span class='word3'>in</span> <span class='word3'>Appendix</span><span class='ignore'>~</span><span class='command'>\ref</span><span class='ignore'>{</span><span class='ignore'>sec</span><span class='ignore'>:</span><span class='ignore'>id</span><span class='ignore'>}</span><span class='ignore'>.</span><span class='ignore'>}</span><br>
+	<span class='exclcommand'>\label</span><span class='ignore'>{</span><span class='ignore'>tab</span><span class='ignore'>:</span><span class='ignore'>mlp</span><span class='ignore'>_</span><span class='ignore'>gisette</span><span class='ignore'>}</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{table}</span><br>
+<br>
+<br>
+<br>
+<br>
+<span class='command'>\section</span><span class='ignore'>{</span><span class='word2'>Feature</span> <span class='word2'>Selection</span><span class='ignore'>}</span><br>
+<br>
+<br>
+<br>
+<br>
+<span class='command'>\section</span><span class='word2'>{Results}</span><br>
+<br>
+<span class='command'>\section</span><span class='word2'>{Conclusions}</span><br>
+<br>
+<br>
+<span class='command'>\newpage</span><br>
+<br>
+<span class='tc'>%TC:ignore</span><br>
+<span class='ignore'>\bibliographystyle</span><span class='ignore'>{ecs}</span><br>
+<span class='ignore'>\bibliography</span><span class='ignore'>{references}</span><br>
+<br>
+<br>
+<br>
+<span class='ignore'>\backmatter</span><br>
+<span class='ignore'>\begin</span><span class='ignore'>{appendix}</span><br>
+<br>
+<span class='ignore'>\newpage</span><br>
+<br>
+<br>
+<span class='ignore'>\section</span><span class='ignore'>{</span><span class='ignore'>Submission</span><span class='ignore'> </span><span class='ignore'>ID</span><span class='ignore'> </span><span class='ignore'>URLs</span><span class='ignore'>}</span><br>
+<span class='ignore'>\label</span><span class='ignore'>{</span><span class='ignore'>sec</span><span class='ignore'>:</span><span class='ignore'>id</span><span class='ignore'>}</span><br>
+<span class='ignore'>\begin</span><span class='ignore'>{itemize}</span><br>
+<span class='ignore'>	</span><span class='ignore'>\item</span><span class='ignore'> </span><span class='ignore'>5518</span><span class='ignore'>:</span><span class='ignore'> </span><span class='ignore'>\href</span><span class='ignore'>{</span><span class='ignore'>http</span><span class='ignore'>:</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='ignore'>www.nipsfsc.ecs.soton.ac.uk</span><span class='ignore'>/</span><span class='ignore'>description</span><span class='ignore'>/</span><span class='ignore'>?</span><span class='ignore'>id</span><span class='ignore'>=</span><span class='ignore'>5518</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='ignore'>http</span><span class='ignore'>:</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='ignore'>www.nipsfsc.ecs.soton.ac.uk</span><span class='ignore'>/</span><span class='ignore'>description</span><span class='ignore'>/</span><span class='ignore'>?</span><span class='ignore'>id</span><span class='ignore'>=</span><span class='ignore'>5518</span><span class='ignore'>}</span><br>
+<span class='ignore'>	</span><span class='ignore'>\item</span><span class='ignore'> </span><span class='ignore'>5549</span><span class='ignore'>:</span><span class='ignore'> </span><span class='ignore'>\href</span><span class='ignore'>{</span><span class='ignore'>http</span><span class='ignore'>:</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='ignore'>www.nipsfsc.ecs.soton.ac.uk</span><span class='ignore'>/</span><span class='ignore'>description</span><span class='ignore'>/</span><span class='ignore'>?</span><span class='ignore'>id</span><span class='ignore'>=</span><span class='ignore'>5549</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='ignore'>http</span><span class='ignore'>:</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='ignore'>www.nipsfsc.ecs.soton.ac.uk</span><span class='ignore'>/</span><span class='ignore'>description</span><span class='ignore'>/</span><span class='ignore'>?</span><span class='ignore'>id</span><span class='ignore'>=</span><span class='ignore'>5549</span><span class='ignore'>}</span><br>
+<span class='ignore'>\end</span><span class='ignore'>{itemize}</span><br>
+<br>
+<br>
+<br>
+<span class='ignore'>\definecolor</span><span class='ignore'>{mygreen}{rgb}</span><span class='ignore'>{</span><span class='ignore'>0</span><span class='ignore'>,</span><span class='ignore'>0.6</span><span class='ignore'>,</span><span class='ignore'>0</span><span class='ignore'>}</span><br>
+<span class='ignore'>\definecolor</span><span class='ignore'>{mygray}{rgb}</span><span class='ignore'>{</span><span class='ignore'>0.5</span><span class='ignore'>,</span><span class='ignore'>0.5</span><span class='ignore'>,</span><span class='ignore'>0.5</span><span class='ignore'>}</span><br>
+<span class='ignore'>\definecolor</span><span class='ignore'>{mymauve}{rgb}</span><span class='ignore'>{</span><span class='ignore'>0.58</span><span class='ignore'>,</span><span class='ignore'>0</span><span class='ignore'>,</span><span class='ignore'>0.82</span><span class='ignore'>}</span><br>
+<br>
+<span class='ignore'>\lstset</span><span class='ignore'>{</span><span class='ignore'> </span><span class='comment'>%</span><br>
+<span class='ignore'>&nbsp; </span><span class='comment'>%backgroundcolor=\color{white},&nbsp;  % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>basicstyle</span><span class='ignore'>=</span><span class='ignore'>\footnotesize</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; </span><span class='comment'>% the size of the fonts that are used for the code</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>breakatwhitespace</span><span class='ignore'>=</span><span class='ignore'>false</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp;  </span><span class='comment'>% sets if automatic breaks should only happen at whitespace</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>breaklines</span><span class='ignore'>=</span><span class='ignore'>true</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  </span><span class='comment'>% sets automatic line breaking</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>captionpos</span><span class='ignore'>=</span><span class='ignore'>b</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class='comment'>% sets the caption-position to bottom</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>commentstyle</span><span class='ignore'>=</span><span class='ignore'>\color</span><span class='ignore'>{mygreen}</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; </span><span class='comment'>% comment style</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>deletekeywords</span><span class='ignore'>=</span><span class='ignore'>{</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>}</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class='comment'>% if you want to delete keywords from the given language</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>escapeinside</span><span class='ignore'>=</span><span class='ignore'>{</span><span class='ignore'>\%</span><span class='ignore'>*</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='ignore'>*</span><span class='ignore'>)</span><span class='ignore'>}</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class='comment'>% if you want to add LaTeX within your code</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>extendedchars</span><span class='ignore'>=</span><span class='ignore'>true</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class='comment'>% lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>frame</span><span class='ignore'>=</span><span class='ignore'>single</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class='comment'>% adds a frame around the code</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>keepspaces</span><span class='ignore'>=</span><span class='ignore'>true</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  </span><span class='comment'>% keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>keywordstyle</span><span class='ignore'>=</span><span class='ignore'>\color</span><span class='ignore'>{blue}</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp;  </span><span class='comment'>% keyword style</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>language</span><span class='ignore'>=</span><span class='ignore'>Matlab</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  </span><span class='comment'>% the language of the code</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>morekeywords</span><span class='ignore'>=</span><span class='ignore'>{</span><span class='ignore'>*</span><span class='ignore'>,</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>}</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class='comment'>% if you want to add more keywords to the set</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>numbers</span><span class='ignore'>=</span><span class='ignore'>left</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class='comment'>% where to put the line-numbers; possible values are (none, left, right)</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>numbersep</span><span class='ignore'>=</span><span class='ignore'>5pt</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  </span><span class='comment'>% how far the line-numbers are from the code</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>numberstyle</span><span class='ignore'>=</span><span class='ignore'>\tiny</span><span class='ignore'>\color</span><span class='ignore'>{black}</span><span class='ignore'>,</span><span class='ignore'> </span><span class='comment'>% the style that is used for the line-numbers</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>rulecolor</span><span class='ignore'>=</span><span class='ignore'>\color</span><span class='ignore'>{black}</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp;  </span><span class='comment'>% if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>showspaces</span><span class='ignore'>=</span><span class='ignore'>false</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class='comment'>% show spaces everywhere adding particular underscores; it overrides 'showstringspaces'</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>showstringspaces</span><span class='ignore'>=</span><span class='ignore'>false</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class='comment'>% underline spaces within strings only</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>showtabs</span><span class='ignore'>=</span><span class='ignore'>false</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class='comment'>% show tabs within strings adding particular underscores</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>stepnumber</span><span class='ignore'>=</span><span class='ignore'>1</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class='comment'>% the step between two line-numbers. If it's 1, each line will be numbered</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>stringstyle</span><span class='ignore'>=</span><span class='ignore'>\color</span><span class='ignore'>{mymauve}</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp;  </span><span class='comment'>% string literal style</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>tabsize</span><span class='ignore'>=</span><span class='ignore'>4</span><span class='ignore'>,</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  </span><span class='comment'>% sets default tabsize to 2 spaces</span><br>
+<span class='ignore'>&nbsp; </span><span class='ignore'>title</span><span class='ignore'>=</span><span class='ignore'>\lstname</span><span class='ignore'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  </span><span class='comment'>% show the filename of files included with \lstinputlisting; also try caption instead of title</span><br>
+<span class='ignore'>}</span><br>
+<br>
+<br>
+<br>
+<span class='ignore'>\section</span><span class='ignore'>{</span><span class='ignore'>Code</span><span class='ignore'> </span><span class='ignore'>Listings</span><span class='ignore'>}</span><br>
+<span class='ignore'>\subsection</span><span class='ignore'>{Perceptron}</span><br>
+<span class='ignore'>\label</span><span class='ignore'>{</span><span class='ignore'>sec</span><span class='ignore'>:</span><span class='ignore'>slp</span><span class='ignore'>_</span><span class='ignore'>appendix</span><span class='ignore'>}</span><br>
+<span class='ignore'>\lstinputlisting</span><span class='ignore'>[</span><span class='ignore'>label</span><span class='ignore'>=</span><span class='ignore'>lst</span><span class='ignore'>:</span><span class='ignore'>slpRun.m</span><span class='ignore'>,</span><span class='ignore'>caption</span><span class='ignore'>=</span><span class='ignore'>run.m</span><span class='ignore'>]</span><span class='ignore'>{</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>/</span><span class='ignore'>SLP</span><span class='ignore'>/</span><span class='ignore'>run.m</span><span class='ignore'>}</span><br>
+<span class='ignore'>\lstinputlisting</span><span class='ignore'>[</span><span class='ignore'>label</span><span class='ignore'>=</span><span class='ignore'>lst</span><span class='ignore'>:</span><span class='ignore'>slpTrain.m</span><span class='ignore'>,</span><span class='ignore'>caption</span><span class='ignore'>=</span><span class='ignore'>train.m</span><span class='ignore'>]</span><span class='ignore'>{</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>/</span><span class='ignore'>SLP</span><span class='ignore'>/</span><span class='ignore'>train.m</span><span class='ignore'>}</span><br>
+<span class='ignore'>\lstinputlisting</span><span class='ignore'>[</span><span class='ignore'>label</span><span class='ignore'>=</span><span class='ignore'>lst</span><span class='ignore'>:</span><span class='ignore'>slpTrainGraph.m</span><span class='ignore'>,</span><span class='ignore'>caption</span><span class='ignore'>=</span><span class='ignore'>trainGraph.m</span><span class='ignore'>]</span><span class='ignore'>{</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>/</span><span class='ignore'>SLP</span><span class='ignore'>/</span><span class='ignore'>train</span><span class='ignore'>_</span><span class='ignore'>graph.m</span><span class='ignore'>}</span><br>
+<span class='ignore'>\lstinputlisting</span><span class='ignore'>[</span><span class='ignore'>label</span><span class='ignore'>=</span><span class='ignore'>lst</span><span class='ignore'>:</span><span class='ignore'>slpPredict.m</span><span class='ignore'>,</span><span class='ignore'>caption</span><span class='ignore'>=</span><span class='ignore'>predict.m</span><span class='ignore'>]</span><span class='ignore'>{</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>/</span><span class='ignore'>SLP</span><span class='ignore'>/</span><span class='ignore'>predict.m</span><span class='ignore'>}</span><br>
+<span class='ignore'>\lstinputlisting</span><span class='ignore'>[</span><span class='ignore'>label</span><span class='ignore'>=</span><span class='ignore'>lst</span><span class='ignore'>:</span><span class='ignore'>slpFeatSelect.m</span><span class='ignore'>,</span><span class='ignore'>caption</span><span class='ignore'>=</span><span class='ignore'>featSelect.m</span><span class='ignore'>]</span><span class='ignore'>{</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>/</span><span class='ignore'>SLP</span><span class='ignore'>/</span><span class='ignore'>feat</span><span class='ignore'>_</span><span class='ignore'>select.m</span><span class='ignore'>}</span><br>
+<br>
+<span class='ignore'>\subsection</span><span class='ignore'>{</span><span class='ignore'>Multi</span><span class='ignore'> </span><span class='ignore'>Layer</span><span class='ignore'> </span><span class='ignore'>Perceptron</span><span class='ignore'>}</span><br>
+<span class='ignore'>\label</span><span class='ignore'>{</span><span class='ignore'>sec</span><span class='ignore'>:</span><span class='ignore'>mlp</span><span class='ignore'>_</span><span class='ignore'>appendix</span><span class='ignore'>}</span><br>
+<span class='ignore'>\lstinputlisting</span><span class='ignore'>[</span><span class='ignore'>label</span><span class='ignore'>=</span><span class='ignore'>lst</span><span class='ignore'>:</span><span class='ignore'>mlpRun.m</span><span class='ignore'>,</span><span class='ignore'>caption</span><span class='ignore'>=</span><span class='ignore'>run.m</span><span class='ignore'>]</span><span class='ignore'>{</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>/</span><span class='ignore'>MLP</span><span class='ignore'>/</span><span class='ignore'>run.m</span><span class='ignore'>}</span><br>
+<span class='ignore'>\lstinputlisting</span><span class='ignore'>[</span><span class='ignore'>label</span><span class='ignore'>=</span><span class='ignore'>lst</span><span class='ignore'>:</span><span class='ignore'>mlpTrain.m</span><span class='ignore'>,</span><span class='ignore'>caption</span><span class='ignore'>=</span><span class='ignore'>train.m</span><span class='ignore'>]</span><span class='ignore'>{</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>/</span><span class='ignore'>MLP</span><span class='ignore'>/</span><span class='ignore'>train.m</span><span class='ignore'>}</span><br>
+<span class='ignore'>\lstinputlisting</span><span class='ignore'>[</span><span class='ignore'>label</span><span class='ignore'>=</span><span class='ignore'>lst</span><span class='ignore'>:</span><span class='ignore'>mlpPredict.m</span><span class='ignore'>,</span><span class='ignore'>caption</span><span class='ignore'>=</span><span class='ignore'>predict.m</span><span class='ignore'>]</span><span class='ignore'>{</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>/</span><span class='ignore'>MLP</span><span class='ignore'>/</span><span class='ignore'>predict.m</span><span class='ignore'>}</span><br>
+<span class='ignore'>\lstinputlisting</span><span class='ignore'>[</span><span class='ignore'>label</span><span class='ignore'>=</span><span class='ignore'>lst</span><span class='ignore'>:</span><span class='ignore'>mlpFeatSelect.m</span><span class='ignore'>,</span><span class='ignore'>caption</span><span class='ignore'>=</span><span class='ignore'>featSelect.m</span><span class='ignore'>]</span><span class='ignore'>{</span><span class='ignore'>.</span><span class='ignore'>.</span><span class='ignore'>/</span><span class='ignore'>SLP</span><span class='ignore'>/</span><span class='ignore'>feat</span><span class='ignore'>_</span><span class='ignore'>select.m</span><span class='ignore'>}</span><br>
+<br>
+<br>
+<br>
+<span class='ignore'>\end</span><span class='ignore'>{appendix}</span><br>
+<br>
+<span class='tc'>%TC:endignore</span><br>
+<span class='grouping'>\end</span><span class='grouping'>{document}</span><br>
+<span class='comment'>%% ----------------------------------------------------------------</span><br>
+<br>
+</p></div>
+<div class='count'>
+<ul class='count'>
+<li class='header'>File: report.tex</li>
+<li>Encoding: ascii</li>
+<li>Words in text: 432</li>
+<li>Words in headers: 14</li>
+<li>Words in float captions: 43</li>
+<li>Number of headers: 7</li>
+<li>Number of floats: 7</li>
+<li>Number of math inlines: 14</li>
+<li>Number of math displayed: 5</li>
+<li>Subcounts:</li>
+<span class='subcount'>
+<li class='fielddesc'>&nbsp; text+headers+captions (#headers/#floats/#inlines/#displayed)</li>
+  <li>60+1+0 (1/0/3/2) Section: Introduction</li>
+  <li>64+4+0 (1/0/1/0) Section: Classifier Build and Test</li>
+  <li>176+1+26 (1/4/3/2) Subsection: Perceptron</li>
+  <li>132+4+17 (1/3/7/1) Subsection: Multi Layer Perceptron (MLP)</li>
+  <li>0+2+0 (1/0/0/0) Section: Feature Selection</li>
+  <li>0+1+0 (1/0/0/0) Section: Results</li>
+  <li>0+1+0 (1/0/0/0) Section: Conclusions</li>
+</span>
+</ul>
+</div>
+</div>
+
+</body>
+
+</html>

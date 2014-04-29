@@ -69,7 +69,7 @@ Everything implemented has been developed from scratch for the MATLAB programmin
 	\label{eqn:theta}
 \end{equation}
 
-\section{Classifier Architectures}
+\section{Classifier Build and Test}
 
 Artificial Neural Networks (ANNs) have been chosen as the classifier architectures.
 ANNs are efficient learning machines with biological inspiration~\citep{bishop06pattern}. 
@@ -114,7 +114,7 @@ All code for the perceptron is held in appendix~\ref{sec:slp_appendix}
 
 \begin{figure}[ht]
    \centering
-    \includegraphics[width = 12cm]{SLP_train.pdf}
+    \includegraphics[width = 14cm]{SLP_train.pdf}
    \caption{Perceptron training on the dexter dataset.}
    \label{fig:slp_train}
 \end{figure}
@@ -147,17 +147,25 @@ All code for the perceptron is held in appendix~\ref{sec:slp_appendix}
 
 
 
-\subsection{Multi Layer Perceptron}
+\subsection{Multi Layer Perceptron (MLP)}
 Section~\ref{sec:perceptron} can be expanded by concatenating the architecture to produce a multi layer perceptron.
 They contain hidden layers and when used with non-linear activation functions can produced a non-linear separation boundary~\citep{bennett01ml}.
 Only one hidden layer is implemented for simplicity as shown in figure~\ref{fig:mlp}.
 The hidden nodes use an offset $tanh$ and output uses the $\Theta$ function.
 
 
+When testing the MLP all the features are used with $50$ hidden nodes.
+Table~\ref{tab:mlp_dexter} is trained using a value of $\eta$ set to $10^{-4}$ yet shows no improvement.
+The training set is learnt quickly and no improvement is shown in the validation set.
+Table~\ref{tab:mlp_gisette} does show an improvement over the perceptron with $\eta$ set to $10^{-5}$.
+The taring set is not full learnt and a steady increase in performance is shown during training in figure~\ref{fig:mlp_train}.
+Code for this implementation is held in appendix~\ref{sec:mlp_appendix}
+
+
 \begin{figure}[ht]
    \centering
-    \includegraphics[width = 6cm]{MLP.pdf}
-   \caption{Multi layer perceptron architecture.}
+    \includegraphics[width = 7cm]{MLP.pdf}
+   \caption{MLP architecture.}
    \label{fig:mlp}
 \end{figure}
 
@@ -166,15 +174,32 @@ The hidden nodes use an offset $tanh$ and output uses the $\Theta$ function.
    \label{eqn:mlp}
 \end{equation}
 
+\begin{figure}[ht]
+   \centering
+    \includegraphics[width = 14cm]{MLP_Train.pdf}
+   \caption{MLP training on the gisette dataset.}
+   \label{fig:mlp_train}
+\end{figure}
 
 
-
-\subsection{Testing}
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|l|l|} \hline
+     			& Train & Valid & Test \\ \hline
+		BER & 0.0120 & 0.0280 & 0.0312 \\ \hline
+		AUC & 0.9955 & 0.9864 & 0.9839 \\ \hline
+	\end{tabular}
+	\caption{MLP results on gisette. Submission ID 5549 in Appendix~\ref{sec:id}.}
+	\label{tab:mlp_gisette}
+\end{table}
 
 
 
 
 \section{Feature Selection}
+
+
+
 
 \section{Results}
 
@@ -198,7 +223,8 @@ The hidden nodes use an offset $tanh$ and output uses the $\Theta$ function.
 \section{Submission ID URLs}
 \label{sec:id}
 \begin{itemize}
-	\item 5518: \href{http://nipsfsc.ecs.soton.ac.uk/description/?id=5518}{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5518}
+	\item 5518: \href{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5518}{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5518}
+	\item 5549: \href{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5549}{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5549}
 \end{itemize}
 
 
@@ -240,10 +266,21 @@ The hidden nodes use an offset $tanh$ and output uses the $\Theta$ function.
 \section{Code Listings}
 \subsection{Perceptron}
 \label{sec:slp_appendix}
-\lstinputlisting[label=lst:run.m,caption=run.m]{../SLP/run.m}
-\lstinputlisting[label=lst:train.m,caption=train.m]{../SLP/train.m}
-\lstinputlisting[label=lst:predict.m,caption=predict.m]{../SLP/predict.m}
-\lstinputlisting[label=lst:featSelect.m,caption=featSelect.m]{../SLP/feat_select.m}
+\lstinputlisting[label=lst:slpRun.m,caption=run.m]{../SLP/run.m}
+\lstinputlisting[label=lst:slpTrain.m,caption=train.m]{../SLP/train.m}
+\lstinputlisting[label=lst:slpTrainGraph.m,caption=trainGraph.m]{../SLP/train_graph.m}
+\lstinputlisting[label=lst:slpPredict.m,caption=predict.m]{../SLP/predict.m}
+\lstinputlisting[label=lst:slpFeatSelect.m,caption=featSelect.m]{../SLP/feat_select.m}
+
+\subsection{Multi Layer Perceptron}
+\label{sec:mlp_appendix}
+\lstinputlisting[label=lst:mlpRun.m,caption=run.m]{../MLP/run.m}
+\lstinputlisting[label=lst:mlpTrain.m,caption=train.m]{../MLP/train.m}
+\lstinputlisting[label=lst:mlpPredict.m,caption=predict.m]{../MLP/predict.m}
+\lstinputlisting[label=lst:mlpFeatSelect.m,caption=featSelect.m]{../SLP/feat_select.m}
+
+
+
 \end{appendix}
 
 %TC:endignore

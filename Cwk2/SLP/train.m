@@ -8,7 +8,7 @@ function [param,idx_feat]=train(X_train, Y_train, X_valid, Y_valid, feat)
 	W=rand(features,1)-0.5;					% Init weights to zero 
 	for t=1:10
 		x(t) = t;
-		Y=unitVec(X*W)';					% Do	
+		Y=tnah(X*W)';					% Do	
 		deltaW = (Y_train - Y)';
 		W = W + eta.*(deltaW*X)';			% Train
 	end
