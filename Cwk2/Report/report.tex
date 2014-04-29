@@ -37,6 +37,9 @@
 
 
 \begin{abstract}
+All algorithms implemented in this report is written by the author for the MATLA programming language.
+Initial testing with a linear perceptron using all features in the input space yields good results on the dexter and gisette datasets.
+The objective is to further optimise the performance on these datasets. 
 \end{abstract}
 
 %TC:endignore
@@ -81,108 +84,39 @@ The error space can be considered as a function of parameters and the training d
 Figure~\ref{fig:slp} holds the most simple manifestation of an ANN called a perceptron.
 Each feature of an input pattern is weighted and then summed, along with a bias term, to produce an output.
 This output passes through a step activation function for binary classification.
-Capable of producing a linear separation boundary subject to equation~\eqref{eqn:slp} the method serves as starting point for further investigation into the data.
-The discrete error from from the training patterns is calculated using equation~\eqref{eqn:slp_error}.
-Equation~\eqref{eqn:slp_mat} expands the method by considering many different training patterns applied to only one set of weights.
-The weight vector is trained using the iterative learning rule held in equations~\eqref{eqn:slp_learn_1},~\eqref{eqn:slp_learn_2} and~\eqref{eqn:slp_learn_3}~\citep{info05mackay}.
-In practice the offset parameter, $b$, is added to the weight vector and every input pattern is appended with a constant unit feature to allow complete training.
+Capable of producing a linear separation boundary the method serves as starting point for further investigation into the data.
+The architecture is vectorised in equation.~\eqref{eqn:slp_mat} to classify an entire dataset. 
+The offset parameter, $b$, is included in the matrix and the input patterns are fixed with the unit feature to assist with training the classifier. 
+
+Batch training is done iteratively using equation~\eqref{eqn:slp_learn} where the error between the output and labels is propagates back to the weights using the transpose of the input patterns.
+A training parameter, $\eta$, hes been manually tuned to $10^{-4}$.
+Figure~\ref{fig:slp_train} shows the performance on the dexter dataset over the training process.
+Tested upon the available datasets the only two reasonable performances were on dexter and gisette which is shown in tables~\ref{tab:slp_dexter} and~\ref{tab:slp_gisette} respectively.
+All code for the perceptron is held in appendix~\ref{sec:slp_appendix}
 
 \begin{figure}[ht]
    \centering
-    \includegraphics[width = 8cm]{SLP.pdf}
+    \includegraphics[width = 6cm]{SLP.pdf}
    \caption{Perceptron architecture.}
    \label{fig:slp}
 \end{figure}
 
 \begin{equation}
-   y = \Theta \left(b + \sum_{i=1}^{n} w_i x_i \right)
-   \label{eqn:slp}
-\end{equation}
-
-\begin{equation}	
-	e = t - y,\:\:e \in \{-2,0.+2\}
-	\label{eqn:slp_error}
-\end{equation}
-
-\begin{equation}
-   \textbf{Y} = \Theta ( \textbf{X}.\textbf{W} + \textbf{b})
+   \textbf{Y} = \Theta ( \textbf{X}.\textbf{W})
    \label{eqn:slp_mat}
 \end{equation}
 
 \begin{equation}	
-	\textbf{W}_{t+1} = \textbf{W}_t + \Delta \textbf{W}
-	\label{eqn:slp_learn_1}
+	\textbf{W}_{t+1} = \textbf{W}_t + \mathbf{\eta}*(\mathbf{Y}-\mathbf{T})\mathbf{X}^T
+	\label{eqn:slp_learn}
 \end{equation}
-
-\begin{equation}	
-	\mathbf{E} = (\mathbf{T} - \mathbf{Y})^{T}
-	\label{eqn:slp_learn_2}
-\end{equation}
-
-\begin{equation}	
-	\Delta \mathbf{W} = \mathbf{\eta}*\mathbf{E}\mathbf{X}^T
-	\label{eqn:slp_learn_3}
-\end{equation}
-
-
-\subsection{Multi Layer Perceptron}
-Section~\ref{sec:perceptron} can be expanded by concatenating the architecture to produce a multi layer perceptron.
-They contain hidden layers and when used with non-linear activation functions can produced a non-linear separation boundary~\citep{bennett01ml}.
-Only one hidden layer is implemented for simplicity as shown in Figure~\ref{fig:mlp}. 
 
 
 \begin{figure}[ht]
    \centering
-    \includegraphics[width = 8cm]{MLP.pdf}
-   \caption{Multi layer perceptron architecture.}
-   \label{fig:mlp}
-\end{figure}
-
-\begin{equation}
-   y = \Theta \left(b + \sum_{i=1}^{n} w_i x_i \right)
-   \label{eqn:slp}
-\end{equation}
-
-\begin{equation}	
-	e = t - y,\:\:e \in \{-2,0.+2\}
-	\label{eqn:slp_error}
-\end{equation}
-
-\begin{equation}
-   \textbf{Y} = \Theta ( \textbf{X}.\textbf{W} + \textbf{b})
-   \label{eqn:slp_mat}
-\end{equation}
-
-\begin{equation}	
-	\textbf{W}_{t+1} = \textbf{W}_t + \Delta \textbf{W}
-	\label{eqn:slp_learn_1}
-\end{equation}
-
-\begin{equation}	
-	\mathbf{E} = (\mathbf{T} - \mathbf{Y})^{T}
-	\label{eqn:slp_learn_2}
-\end{equation}
-
-\begin{equation}	
-	\Delta \mathbf{W} = \mathbf{\eta}*\mathbf{E}\mathbf{X}^T
-	\label{eqn:slp_learn_3}
-\end{equation}
-
-
-\subsection{Testing}
-
-
-
-The classifier was tested upon the the \emph{Dexter} dataset using all of the features avaialble in the input patterns.
-The training iterations are shown in shonw in figure~\ref{fig:mlp_train} and can be matched to the results held in table~\ref{tab:mlp_dexter}.
-Manual tuning was used set the number of hidden nodes to $\mathrm{100}$ and $\mathrm{\eta}$ to a value of $\mathrm{5 \times 10^{-5}}$.
-This performs as expted upon the test data which is only slighly worse than the validation set performance.
-
-\begin{figure}[ht]
-   \centering
-    \includegraphics[width = 10cm]{MLP_Train.pdf}
-   \caption{Training iterations of the MLP.}
-   \label{fig:mlp_train}
+    \includegraphics[width = 12cm]{SLP_train.pdf}
+   \caption{Perceptron training on the dexter dataset.}
+   \label{fig:slp_train}
 \end{figure}
 
 
@@ -190,12 +124,52 @@ This performs as expted upon the test data which is only slighly worse than the 
 	\centering
 	\begin{tabular}{|l|l|l|l|} \hline
      			& Train & Valid & Test \\ \hline
-		BER & 0.0033 & 0.0833 & 0.0890 \\ \hline
-		AUC & 1.0000 & 0.9761 & 0.9739 \\ \hline
+		BER & 0.0000 & 0.0633 & 0.0735 \\ \hline
+		AUC & 1.0000 & 0.9779 & 0.9767 \\ \hline
 	\end{tabular}
-	\caption{MLP results on Dexter. Submission ID 5459~\ref{sec:id}.}
-	\label{tab:mlp_dexter}
+	\caption{Perceptron results on dexter. Submission ID 5518 in Appendix~\ref{sec:id}.}
+	\label{tab:slp_dexter}
 \end{table}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|l|l|} \hline
+     			& Train & Valid & Test \\ \hline
+		BER & 0.0445 & 0.0430 & 0.0432 \\ \hline
+		AUC & 0.9889 & 0.9894 & 0.9907 \\ \hline
+	\end{tabular}
+	\caption{Perceptron results on gisette. Submission ID 5518 in Appendix~\ref{sec:id}.}
+	\label{tab:slp_gisette}
+\end{table}
+
+
+
+
+
+
+\subsection{Multi Layer Perceptron}
+Section~\ref{sec:perceptron} can be expanded by concatenating the architecture to produce a multi layer perceptron.
+They contain hidden layers and when used with non-linear activation functions can produced a non-linear separation boundary~\citep{bennett01ml}.
+Only one hidden layer is implemented for simplicity as shown in figure~\ref{fig:mlp}.
+The hidden nodes use an offset $tanh$ and output uses the $\Theta$ function.
+
+
+\begin{figure}[ht]
+   \centering
+    \includegraphics[width = 6cm]{MLP.pdf}
+   \caption{Multi layer perceptron architecture.}
+   \label{fig:mlp}
+\end{figure}
+
+\begin{equation}
+   y = \Theta \left(b + \sum_{i=1}^{m} u_i \tanh \left(c_i + \sum_{j=1}^{n} x_j w_{j,i}\right)  \right) 
+   \label{eqn:mlp}
+\end{equation}
+
+
+
+
+\subsection{Testing}
 
 
 
@@ -220,13 +194,56 @@ This performs as expted upon the test data which is only slighly worse than the 
 
 \newpage
 
+
 \section{Submission ID URLs}
 \label{sec:id}
 \begin{itemize}
-	\item 5459: \href{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5459}{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5459}
+	\item 5518: \href{http://nipsfsc.ecs.soton.ac.uk/description/?id=5518}{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5518}
 \end{itemize}
-\section{Code Listings}
 
+
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  %backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,                    % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=Matlab,                 % the language of the code
+  morekeywords={*,...},            % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{black}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=4,                       % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+
+
+\section{Code Listings}
+\subsection{Perceptron}
+\label{sec:slp_appendix}
+\lstinputlisting[label=lst:run.m,caption=run.m]{../SLP/run.m}
+\lstinputlisting[label=lst:train.m,caption=train.m]{../SLP/train.m}
+\lstinputlisting[label=lst:predict.m,caption=predict.m]{../SLP/predict.m}
+\lstinputlisting[label=lst:featSelect.m,caption=featSelect.m]{../SLP/feat_select.m}
 \end{appendix}
 
 %TC:endignore
