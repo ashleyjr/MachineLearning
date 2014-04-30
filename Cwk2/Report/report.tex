@@ -48,11 +48,14 @@ The objective is to further optimise the performance on these datasets.
 
 \section{Introduction}
 
+Everything implemented has been developed from scratch for the MATLAB programming language. 
+Neural networks were chosen as the starting point for investigation as per the author's interests. 
+Throughout datasets taken from and submissions are made to a feature selection challenge~\citep{nips03feat}.
+
 Each dataset has been divided in three section for training, validation and test submission.
 The final partition labels remain hidden from the development process.
 The discrete class labels, $t$, and the classifier outputs, $y$, are described by equation~\eqref{eqn:output}.
 Keeping to these output values requires using the thresholding function $\Theta$ in equation~\eqref{eqn:theta}. 
-Everything implemented has been developed from scratch for the MATLAB programming language. 
 
 
 \begin{equation}
@@ -122,24 +125,15 @@ All code for the perceptron is held in appendix~\ref{sec:slp_appendix}
 
 \begin{table}[h]
 	\centering
-	\begin{tabular}{|l|l|l|l|} \hline
-     			& Train & Valid & Test \\ \hline
-		BER & 0.0000 & 0.0633 & 0.0735 \\ \hline
-		AUC & 1.0000 & 0.9779 & 0.9767 \\ \hline
+	\begin{tabular}{|l|l|l|l|l|} \hline
+     	\textbf{Dataset}	& \textbf{Measure}	& \textbf{Train} & \textbf{Valid} & \textbf{Test} \\ \hline	
+		Dexter & BER & 0.0000 & 0.0633 & 0.0735 \\ \hline
+		Dexter & AUC & 1.0000 & 0.9779 & 0.9767 \\ \hline
+		Gisette & BER & 0.0445 & 0.0430 & 0.0432 \\ \hline
+		Gisette & AUC & 0.9889 & 0.9894 & 0.9907 \\ \hline
 	\end{tabular}
-	\caption{Perceptron results on dexter. Submission ID 5518 in Appendix~\ref{sec:id}.}
-	\label{tab:slp_dexter}
-\end{table}
-
-\begin{table}[h]
-	\centering
-	\begin{tabular}{|l|l|l|l|} \hline
-     			& Train & Valid & Test \\ \hline
-		BER & 0.0445 & 0.0430 & 0.0432 \\ \hline
-		AUC & 0.9889 & 0.9894 & 0.9907 \\ \hline
-	\end{tabular}
-	\caption{Perceptron results on gisette. Submission ID 5518 in Appendix~\ref{sec:id}.}
-	\label{tab:slp_gisette}
+	\caption{Perceptron results on dexter and gisette. Submission ID $5518$ in Appendix~\ref{sec:id}.}
+	\label{tab:slp_test}
 \end{table}
 
 
@@ -182,21 +176,67 @@ Code for this implementation is held in appendix~\ref{sec:mlp_appendix}
 \end{figure}
 
 
+
+
 \begin{table}[h]
 	\centering
-	\begin{tabular}{|l|l|l|l|} \hline
-     			& Train & Valid & Test \\ \hline
-		BER & 0.0120 & 0.0280 & 0.0312 \\ \hline
-		AUC & 0.9955 & 0.9864 & 0.9839 \\ \hline
+	\begin{tabular}{|l|l|l|l|l|} \hline
+     	\textbf{Dataset}	& \textbf{Measure}	& \textbf{Train} & \textbf{Valid} & \textbf{Test} \\ \hline
+		Dexter & BER & 0.0000 & 0.0833 & 0.1110 \\ \hline
+		Dexter & AUC & 1.0000 & 0.9704 & 0.9632 \\ \hline
+		Gisette & BER & 0.0120 & 0.0280 & 0.0312 \\ \hline
+		Gisette & AUC & 0.9955 & 0.9864 & 0.9839 \\ \hline
 	\end{tabular}
-	\caption{MLP results on gisette. Submission ID 5549 in Appendix~\ref{sec:id}.}
-	\label{tab:mlp_gisette}
+	\caption{MLP results on dexter and gisette. Submission ID $5549$ in Appendix~\ref{sec:id}.}
+	\label{tab:mlp_test}
 \end{table}
 
 
 
 
+
+
+
 \section{Feature Selection}
+
+\subsection{Perceptron Weights}
+
+When trained the weights of a percptron give an indication of how the each feature contributes to the classifier output.
+This is done in a iterative process where the five features with the smallest weights are removed and the net is retrained.
+Figure~\ref{fig:feat} shows how this process effects the performance of the percptron on each dataset.
+
+Gisette gradually improves in performance before sharply increasing as nearly all the features are removed.
+Dexter remains stable but becomes erratic after $18000$ features have been removed.
+In table ~\cite{tab:feat_test} features are selected just before the perforamce decreases sharply attempting to minimise the number of features.
+No improvement was made even when passed though the MLP but the attempt was to generalise by removing as many features as possible. 
+
+\begin{figure}[!htb]
+	\centering
+	\subfigure[Removing features from gisette.]{\includegraphics[width=0.4\textwidth,height=0.35\textwidth]{SLP_gisette.pdf}
+	\label{fig:feat_gisette}}
+	\subfigure[Removing features from dexter.]{\includegraphics[width=0.4\textwidth,height=0.35\textwidth]{SLP_dexter.pdf}
+	\label{fig:feat_dexter}}
+\caption{Feature reduction using perceptron weights.}
+\label{fig:feat}
+\end{figure}
+
+
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|l|l|l|l|l|} \hline
+     	\textbf{Dataset} & \textbf{Features} & \textbf{Probes (\%)}	& \textbf{Measure}	& \textbf{Train} & \textbf{Valid} & \textbf{Test} \\ \hline
+		Dexter &60 &0.3& BER & 0.0233 & 0.0833 & 0.0825 \\ \hline
+		Dexter &60&0.3& AUC & 0.9911 & 0.9543 & 0.9646 \\ \hline
+		Gisette &30&0.6& BER & 0.0410 & 0.0520 & 0.0483 \\ \hline
+		Gisette &30&0.6& AUC & 0.9498 & 0.9393 & 0.9398 \\ \hline
+	\end{tabular}
+	\caption{Feature reduction results on dexter and gisette. Submission ID $5760$ in Appendix~\ref{sec:id}.}
+	\label{tab:feat_test}
+\end{table}
+
+
+
 
 
 
@@ -225,6 +265,7 @@ Code for this implementation is held in appendix~\ref{sec:mlp_appendix}
 \begin{itemize}
 	\item 5518: \href{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5518}{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5518}
 	\item 5549: \href{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5549}{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5549}
+	\item 5760: \href{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5760}{http://www.nipsfsc.ecs.soton.ac.uk/description/?id=5760}
 \end{itemize}
 
 

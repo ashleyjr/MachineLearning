@@ -1,0 +1,22 @@
+\begin{thebibliography}{3}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{{\tt #1}}\fi
+
+\bibitem[Bishop(2006)]{bishop06pattern}
+C.M. Bishop.
+\newblock {\em Pattern Recognition and Machine Learning}.
+\newblock Information Science and Statistics. Springer, 1 edition, 2006.
+
+\bibitem[Gunn(2003)]{nips03feat}
+Steve Gunn.
+\newblock Feature selection challenge, 2003.
+\newblock {[Online]}.
+
+\bibitem[Pr\"{u}gel-Bennett(2001)]{bennett01ml}
+Adam Pr\"{u}gel-Bennett.
+\newblock {\em {COMP3008: Machine Learning}}.
+\newblock {University of Southampton}, 2001.
+\newblock Lecture Notes.
+
+\end{thebibliography}

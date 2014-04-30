@@ -1,49 +1,55 @@
-function [param]=train_graph(X_train, Y_train, X_valid, Y_valid, feat,iter)
-	eta=1;
+function [param,idx_feat]=train(X_train, Y_train, X_valid, Y_valid, feat)
+	eta=1e-2;
 	X=X_train(:,feat);						% All features
 	patterns=size(X,1);
 	ones_row=ones(patterns,1);
-	X=horzcat(X,ones_row);			% Offset on all input patterns
+	X=horzcat(X,ones_row);					% Offset on all input patterns
 	features=size(X,2);
-	W=zeros(features,1);			% Init weights to zero 
-
-
-	for t=1:iter
+	W=rand(features,1);					% Init weights to zero 
+	for t=1:30
 		x(t) = t;
-		Y=unitVec(X*W)';	
-		
-		
+		Y=tanh(X*W);					% Do	
 		deltaW = (Y_train - Y)';
-		W = W + eta*(deltaW*X)';
-
-
-
+		W = W + eta.*(deltaW*X)';			% Train
 		param.W = W(1:(end-1));
 		param.b = W(end);
-
+		% Predict
 		[Y_resu_train, Y_conf_train] 	= predict( X_train, param, feat);
-		[Y_resu_valid, Y_conf_valid]	= predict( X_valid, param, feat);
-
+    	[Y_resu_valid, Y_conf_valid] 	= predict( X_valid, param, feat);
 		% Blance error for train and validiate
-		err_bal_train(t)				= balanced_errate(Y_resu_train, Y_train);
-		err_bal_valid(t)				= balanced_errate(Y_resu_valid, Y_valid);
-		
+		err_bal_train(t)				= balanced_errate(Y_resu_train, Y_train)*100;
+    	err_bal_valid(t)				= balanced_errate(Y_resu_valid, Y_valid)*100;
 		% AUC error for train and validiate
-		err_auc_train(t)				= auc(Y_resu_train.*Y_conf_train, Y_train);
-		err_auc_valid(t)				= auc(Y_resu_valid.*Y_conf_valid, Y_valid);
-
-
-
+		err_auc_train(t)				= auc(Y_resu_train.*Y_conf_train, Y_train)*100;
+    	err_auc_valid(t)				= auc(Y_resu_valid.*Y_conf_valid, Y_valid)*100;
 	end
-
-	param.W = W(1:(end-1));
-	param.b = W(end);
-
 	figure;
+	title('Perceptron Training')
 	subplot(1,2,1)
 	plot(x,err_bal_train,x,err_bal_valid)
+	ylabel('BER(%)')
+	xlabel('Iterations')
 	grid on;
 	subplot(1,2,2)
 	plot(x,err_auc_train,x,err_auc_valid)
+	ylabel('AUC(%)')
+	xlabel('Iterations')
 	grid on ;
 
+	rec = 1;
+	idx_feat = feat;
+	test = abs(param.W);
+	for i=1:10
+		pick = ceil(rand(1)*size(test,1));
+		small = test(pick);
+		rm = pick;
+		for j=1:300
+			pick = ceil(rand(1)*size(test,1));
+			if(test(pick) < small )
+				rm = pick;
+				small = test(pick);
+			end
+		end
+		test(rm) = [];
+		idx_feat(rm) = []; 	
+	end
